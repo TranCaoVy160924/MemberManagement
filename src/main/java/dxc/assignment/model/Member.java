@@ -8,19 +8,17 @@ import javax.validation.constraints.Size;
 public class Member {
 	private int id;
 
-	@NotBlank(message = "Username is required")
+	@Size(max = 25, message = "Please enter your email address correctly within 25 characters")
 	private String username;
 
 	@Email(message = "Invalid email format")
-	@NotBlank(message = "Email is required")
+	@Size(max = 25, message = "Please enter your email address correctly within 25 characters")
 	private String email;
 
-	@Pattern(regexp = "\\d{10}", message = "Invalid phone number format")
-	@NotBlank(message = "Phone number is required")
+	@Pattern(regexp = "\\d{10}", message = "Must be entered within 10 digits")
 	private String phoneNumber;
 
-	@Size(min = 8, max = 25, message = "Password must be at least 8 characters")
-	@NotBlank(message = "Password is required")
+	@Size(min = 8, max = 25, message = "Password must be between 8 to 25 characters")
 	private String password;
 
 	public Member(int id, String username, String email, String phoneNumber,

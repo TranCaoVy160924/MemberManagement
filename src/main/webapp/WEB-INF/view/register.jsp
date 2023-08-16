@@ -30,8 +30,8 @@
 					<div class="card">
 						<div class="card-body">
 							<form:form modelAttribute="member"
-								class="form-horizontal form-material" action="${contextPath }/register"
-								method="post">
+								class="form-horizontal form-material"
+								action="${contextPath }/register" method="post">
 								<input name="id" type="hidden" value="0"
 									class="form-control p-0 border-0" />
 								<div class="form-group mb-4">
@@ -57,7 +57,7 @@
 									<label class="col-md-12 p-0">Password</label>
 									<div class="col-md-12 border-bottom p-0">
 										<form:input path="password" type="password"
-											class="form-control p-0 border-0" />
+											placeholder="Password" class="form-control p-0 border-0" />
 										<form:errors class="text-danger" path="password" />
 										<br />
 									</div>
@@ -73,7 +73,7 @@
 								</div>
 								<div class="form-group mb-4">
 									<div class="col-sm-12">
-										<button class="btn btn-success">Update Profile</button>
+										<button class="btn btn-success">Register Member</button>
 									</div>
 								</div>
 							</form:form>

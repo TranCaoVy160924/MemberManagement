@@ -25,49 +25,59 @@
 		<c:import url="layout/sidebar.jsp" />
 		<div class="page-wrapper">
 			<div class="container-fluid">
-				<div
-					class="row justify-content-center align-items-center min-vh-100">
-					<form class="col-md-6 col-lg-4 form-horizontal form-material"
-						action="register" method="post">
-						<input id="id" name="id" type="hidden" value="0"
-							class="form-control p-0 border-0">
-						<div class="form-group mb-4">
-							<label class="col-md-12 p-0">Username</label>
-							<div class="col-md-12 border-bottom p-0">
-								<input readonly name="username" type="text"
-									placeholder="Username" value="${member.username }"
+				<div class="row">
+					<div class="col-md-6 mx-auto">
+						<div class="white-box">
+							<h3 class="box-title">${title }</h3>
+							<p class="text-muted">If you are satisfied with this content, please click the 'Confirm' button</p>
+							<form class="cform-horizontal form-material"
+								action="${contextPath }/${action }" method="post">
+								<input id="id" name="id" type="hidden" value="${member.id }"
 									class="form-control p-0 border-0">
-							</div>
+								<div class="form-group mb-4">
+									<label class="col-md-12 p-0">Username</label>
+									<div class="col-md-12 border-bottom p-0">
+										<input readonly name="username" type="text"
+											placeholder="Username" value="${member.username }"
+											class="form-control p-0 border-0">
+									</div>
+								</div>
+								<div class="form-group mb-4">
+									<label for="example-email" class="col-md-12 p-0">Email</label>
+									<div class="col-md-12 border-bottom p-0">
+										<input readonly name="email" type="email"
+											placeholder="johnathan@admin.com" value="${member.email }"
+											class="form-control p-0 border-0" name="example-email">
+									</div>
+								</div>
+								<div class="form-group mb-4">
+									<label class="col-md-12 p-0">Password</label>
+									<div class="col-md-12 border-bottom p-0">
+										<input readonly name="password" type="password"
+											value="${member.password }" class="form-control p-0 border-0">
+									</div>
+								</div>
+								<div class="form-group mb-4">
+									<label class="col-md-12 p-0">Phone Number</label>
+									<div class="col-md-12 border-bottom p-0">
+										<input readonly name="phoneNumber" type="text"
+											placeholder="123 456 7890" value="${member.phoneNumber }"
+											class="form-control p-0 border-0">
+									</div>
+								</div>
+								<div class="form-group mb-4">
+									<div class="col-sm-12 row">
+										<div class="col-sm-9">
+											<button class="btn btn-success">Confirm</button>
+										</div>
+										<div class="col-sm-3">
+											<button formaction="${contextPath }/${currentAction }" formmethod="get" class="btn btn-danger">Cancel</button>
+										</div>
+									</div>
+								</div>
+							</form>
 						</div>
-						<div class="form-group mb-4">
-							<label for="example-email" class="col-md-12 p-0">Email</label>
-							<div class="col-md-12 border-bottom p-0">
-								<input readonly name="email" type="email"
-									placeholder="johnathan@admin.com" value="${member.email }"
-									class="form-control p-0 border-0" name="example-email">
-							</div>
-						</div>
-						<div class="form-group mb-4">
-							<label class="col-md-12 p-0">Password</label>
-							<div class="col-md-12 border-bottom p-0">
-								<input readonly name="password" type="password"
-									value="${member.password }" class="form-control p-0 border-0">
-							</div>
-						</div>
-						<div class="form-group mb-4">
-							<label class="col-md-12 p-0">Phone Number</label>
-							<div class="col-md-12 border-bottom p-0">
-								<input readonly name="phoneNumber" type="text"
-									placeholder="123 456 7890" value="${member.phoneNumber }"
-									class="form-control p-0 border-0">
-							</div>
-						</div>
-						<div class="form-group mb-4">
-							<div class="col-sm-12">
-								<button class="btn btn-success">Update Profile</button>
-							</div>
-						</div>
-					</form>
+					</div>
 				</div>
 			</div>
 			<c:import url="layout/footer.jsp" />

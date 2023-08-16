@@ -14,6 +14,12 @@
 			<ul id="sidebarnav">
 				<li class="sidebar-item"><a
 					class="sidebar-link waves-effect waves-dark sidebar-link"
+					href="${contextPath }/" aria-expanded="false"> <i
+						class="fa fa-table" aria-hidden="true"></i> <span
+						class="hide-menu">Home</span>
+				</a></li>
+				<li class="sidebar-item"><a
+					class="sidebar-link waves-effect waves-dark sidebar-link"
 					href="${contextPath }/register" aria-expanded="false"> <i
 						class="fa fa-user" aria-hidden="true"></i> <span class="hide-menu">Register</span>
 				</a></li>

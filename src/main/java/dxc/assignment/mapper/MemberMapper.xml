@@ -11,12 +11,32 @@
 		<result property="phoneNumber" column="phone_number" />
 	</resultMap>
 
-	<select id="select" resultType="dxc.assignment.model.Member">
-		SELECT * FROM members
+	<select id="select" resultMap="memberMap">
+		SELECT member_id, username, email, password, phone_number FROM members
+		ORDER BY member_id ASC;
+	</select>
+
+	<select id="selectById" resultMap="memberMap">
+		SELECT member_id, username, email, password, phone_number
+		FROM members
+		WHERE members.member_id = #{id}
+		ORDER BY member_id ASC;
 	</select>
 
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO users(username, email, password, phone_number)
-		VALUES(#{username}, #{email}, #{password}), #{phone_number});
+		INSERT INTO members(username, email, password, phone_number)
+		VALUES(#{username},
+		#{email}, #{password}, #{phoneNumber});
 	</insert>
+
+	<update id="update">
+		UPDATE members
+		SET username = #{username}, email = #{email},
+		password = #{password}, phone_number = #{phoneNumber}
+		WHERE member_id = #{id}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM members WHERE member_id = #{id}
+	</delete>
 </mapper>
