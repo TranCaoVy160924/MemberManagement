@@ -12,18 +12,20 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import dxc.assignment.helper.EncoderHelper;
+//import dxc.assignment.helper.EncoderHelper;
 import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
 
 @Controller
 public class AddMemberController {
 	private final MemberMapper memberMapper;
-	private final EncoderHelper encoderHelper;
+//	private final EncoderHelper encoderHelper;
 
-	public AddMemberController(MemberMapper memberMapper, EncoderHelper encoderHelper) {
+	public AddMemberController(MemberMapper memberMapper
+//			, EncoderHelper encoderHelper
+			) {
 		this.memberMapper = memberMapper;
-		this.encoderHelper = encoderHelper;
+//		this.encoderHelper = encoderHelper;
 	}
 
 	@GetMapping("/register")
@@ -69,7 +71,7 @@ public class AddMemberController {
 	public String confirmRegister(@ModelAttribute("member") Member member,
 			ModelMap modelMap) {
 		try {
-			encoderHelper.encodeMemberPassword(member);
+//			encoderHelper.encodeMemberPassword(member);
 			memberMapper.insert(member);
 
 			return "redirect:/";

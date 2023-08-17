@@ -9,19 +9,24 @@
 		<result property="email" column="email" />
 		<result property="passwordHash" column="password" />
 		<result property="phoneNumber" column="phone_number" />
+		<result property="role" column="role" />
 	</resultMap>
 
 	<select id="select" resultMap="memberMap">
-		SELECT member_id, username, email, password, phone_number FROM members
+		SELECT member_id, username, email, password, phone_number, role FROM members
 		ORDER BY member_id ASC;
 	</select>
 
 	<select id="selectById" resultMap="memberMap">
-		SELECT member_id, username, email, password, phone_number
+		SELECT member_id, username, email, password, phone_number, role
 		FROM members
 		WHERE members.member_id = #{id}
-		ORDER BY
-		member_id ASC;
+	</select>
+	
+	<select id="selectByEmail" resultMap="memberMap">
+		SELECT member_id, username, email, password, phone_number, role
+		FROM members
+		WHERE members.email = #{email}
 	</select>
 
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id">

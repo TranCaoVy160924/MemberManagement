@@ -37,17 +37,20 @@
 			<div class="row justify-content-center">
 				<div class="col-md-6 col-lg-4">
 					<div class="login-wrap p-0">
-						<form action="${contextPath }/login" method="post" class="signin-form">
+						<form action="${contextPath }/login" method="post"
+							class="signin-form">
 							<div class="form-group">
-								<input type="text" name="email" class="form-control" placeholder="Emaill"
-									required>
+								<input type="text" name="username" class="form-control"
+									placeholder="Emaill" required>
 							</div>
 							<div class="form-group">
-								<input id="password-field" type="password" name="email" class="form-control"
-									placeholder="Password" required> <span
+								<input id="password-field" type="password" name="password"
+									class="form-control" placeholder="Password" required> <span
 									toggle="#password-field"
 									class="fa fa-fw fa-eye field-icon toggle-password"></span>
 							</div>
+							<input type="hidden" name="${_csrf.parameterName}"
+								value="${_csrf.token}" />
 							<div class="form-group">
 								<button type="submit"
 									class="form-control btn btn-primary submit px-3">Sign

@@ -21,8 +21,10 @@ public class Member {
 	private String password;
 	
 	private String passwordHash;
+	
+	private String role;
 
-	public Member(int id, String username, String email, String phoneNumber, String passwordHash) {
+	public Member(int id, String username, String email, String phoneNumber, String passwordHash, String role) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -30,10 +32,11 @@ public class Member {
 		this.phoneNumber = phoneNumber;
 		this.password = "";
 		this.passwordHash = passwordHash;
+		this.role = role;
 	}
 
 	public static Member getDefault() {
-		return new Member(0, "", "", "", "");
+		return new Member(0, "", "", "", "", "USER");
 	}
 
 	public int getId() {
@@ -82,5 +85,13 @@ public class Member {
 
 	public void setPasswordHash(String passwordHash) {
 		this.passwordHash = passwordHash;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 }

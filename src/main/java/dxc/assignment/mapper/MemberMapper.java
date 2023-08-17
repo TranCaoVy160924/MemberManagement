@@ -13,6 +13,8 @@ public interface MemberMapper {
 
 	public Member selectById(int id);
 	
+	public Member selectByEmail(String email);
+	
 	public void insert(Member member);
 	
 	public void update(Member member);

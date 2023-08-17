@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import dxc.assignment.helper.EncoderHelper;
+//import dxc.assignment.helper.EncoderHelper;
 import dxc.assignment.helper.ValidationHelper;
 import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
@@ -24,12 +24,13 @@ import dxc.assignment.model.Member;
 @Controller
 public class UpdateMemberController {
 	private final MemberMapper memberMapper;
-	private final EncoderHelper encoderHelper;
+//	private final EncoderHelper encoderHelper;
 
-	public UpdateMemberController(MemberMapper memberMapper,
-			EncoderHelper encoderHelper) {
+	public UpdateMemberController(MemberMapper memberMapper
+//			, EncoderHelper encoderHelper
+			) {
 		this.memberMapper = memberMapper;
-		this.encoderHelper = encoderHelper;
+//		this.encoderHelper = encoderHelper;
 	}
 
 	@GetMapping("/update/{id}")
@@ -78,7 +79,7 @@ public class UpdateMemberController {
 
 	@PostMapping("/confirmUpdate")
 	public String confirmRegister(@ModelAttribute("member") Member member) {
-		encoderHelper.encodeMemberPassword(member);
+//		encoderHelper.encodeMemberPassword(member);
 		memberMapper.update(member);
 
 		return "redirect:/";
