@@ -8,11 +8,10 @@ import javax.validation.constraints.Size;
 public class Member {
 	private int id;
 
-	@Size(max = 25, message = "Please enter your email address correctly within 25 characters")
+	@Size(max = 25, min = 1, message = "Please enter your email address correctly within 25 characters")
 	private String username;
 
 	@Email(message = "Invalid email format")
-	@Size(max = 25, message = "Please enter your email address correctly within 25 characters")
 	private String email;
 
 	@Pattern(regexp = "\\d{10}", message = "Must be entered within 10 digits")

@@ -1,4 +1,4 @@
-package dxc.assignment.mybatis;
+package dxc.assignment.config;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;

@@ -1,5 +1,6 @@
 package dxc.assignment.controller.member;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -16,11 +17,11 @@ import dxc.assignment.model.Member;
 @Controller
 public class AddMemberController {
 	private final MemberMapper memberMapper;
-	
+
 	public AddMemberController(MemberMapper memberMapper) {
 		this.memberMapper = memberMapper;
 	}
-	
+
 	@GetMapping("/register")
 	public String register(ModelMap model) {
 		model.addAttribute("member", Member.getDefault());
@@ -29,29 +30,41 @@ public class AddMemberController {
 
 	@PostMapping("/register")
 	public String register(@Valid @ModelAttribute("member") Member member,
-			BindingResult bindingResult, RedirectAttributes redirectAttribute) {
+			BindingResult bindingResult, HttpServletRequest request) {
 		if (bindingResult.hasErrors()) {
 			return "register";
 		}
 
-		redirectAttribute.addFlashAttribute("member", member);
+		request.getSession().setAttribute("newMember", member);
 		return "redirect:/confirmRegister";
 	}
 
 	@GetMapping("/confirmRegister")
-	public String confirmRegister(@ModelAttribute("member") Member member,
-			ModelMap model) {
+	public String confirmRegister(HttpServletRequest request, ModelMap model) {
+		Member member = (Member) request.getSession().getAttribute("newMember");
+
+		if (member == null) {
+			return "redirect:/register";
+		}
+
 		model.addAttribute("member", member);
 		model.addAttribute("title", "Register new member");
-		model.addAttribute("action", "/confirmRegister");
-		model.addAttribute("currentAction", "/register");
+		model.addAttribute("confirmAction", "/confirmRegister");
+		model.addAttribute("cancelAction", "/cancelRegister");
 		return "confirm";
 	}
 	
+	@GetMapping("/cancelRegister")
+	public String cancelRegister(HttpServletRequest request) {
+		request.getSession().removeAttribute("newMember");
+		
+		return "redirect:/register";
+	}
+
 	@PostMapping("/confirmRegister")
 	public String confirmRegister(@ModelAttribute("member") Member member) {
 		memberMapper.insert(member);
-		
+
 		return "redirect:/";
 	}
 }

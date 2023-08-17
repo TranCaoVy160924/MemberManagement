@@ -1,4 +1,4 @@
-package dxc.assignment.controller;
+package dxc.assignment.config;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

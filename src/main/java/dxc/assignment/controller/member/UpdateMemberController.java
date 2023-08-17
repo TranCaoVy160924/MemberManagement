@@ -1,5 +1,6 @@
 package dxc.assignment.controller.member;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -32,22 +33,33 @@ public class UpdateMemberController {
 
 	@PostMapping("/update")
 	public String update(@Valid @ModelAttribute("member") Member member,
-			BindingResult bindingResult, RedirectAttributes redirectAttribute) {
+			BindingResult bindingResult, HttpServletRequest request) {
 		if (bindingResult.hasErrors()) {
 			return "update";
 		}
 
-		redirectAttribute.addFlashAttribute("member", member);
+		request.getSession().setAttribute("editingMember", member);
 		return "redirect:/confirmUpdate";
 	}
 
 	@GetMapping("/confirmUpdate")
-	public String confirmUpdate(@ModelAttribute("member") Member member, ModelMap model) {
+	public String confirmUpdate(HttpServletRequest request, ModelMap model) {
+		Member member = (Member) request.getSession().getAttribute("editingMember");
+		if (member == null) {
+			return "redirect:/";
+		}
+
 		model.addAttribute("member", member);
 		model.addAttribute("title", "Update member");
-		model.addAttribute("action", "/confirmUpdate");
-		model.addAttribute("currentAction", "/update/" + member.getId());
+		model.addAttribute("confirmAction", "/confirmUpdate");
+		model.addAttribute("cancelAction", "/cancelUpdate/" + member.getId());
 		return "confirm";
+	}
+
+	@GetMapping("/cancelUpdate/{id}")
+	public String cancelUpdate(@PathVariable int id, HttpServletRequest request) {
+		request.getSession().removeAttribute("editingMember");
+		return "redirect:/update/" + id;
 	}
 
 	@PostMapping("/confirmUpdate")
