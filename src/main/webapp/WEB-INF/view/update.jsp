@@ -26,12 +26,16 @@
 		<c:import url="layout/sidebar.jsp" />
 		<div class="page-wrapper">
 			<div class="container-fluid">
-				<div class="col-lg-8 col-xlg-9 col-md-12">
-					<div class="card">
-						<div class="card-body">
-							<form:form modelAttribute="member"
-								class="form-horizontal form-material"
-								action="${contextPath }/update" method="post">
+				<form:form modelAttribute="member"
+					class="form-horizontal form-material"
+					action="${contextPath }/update" method="post">
+					<div class="col-lg-8 col-xlg-9 col-md-12">
+						<h3 class="box-title">
+							Updating ${member.email } <input hidden name="email" type="email"
+								value="${member.email }" />
+						</h3>
+						<div class="card">
+							<div class="card-body">
 								<input name="id" type="hidden" value="${member.id }"
 									class="form-control p-0 border-0" />
 								<div class="form-group mb-4">
@@ -44,19 +48,10 @@
 									</div>
 								</div>
 								<div class="form-group mb-4">
-									<label for="example-email" class="col-md-12 p-0">Email</label>
-									<div class="col-md-12 border-bottom p-0">
-										<form:input path="email" type="email" value="${member.email }"
-											class="form-control p-0 border-0" />
-										<form:errors class="text-danger" path="email" />
-										<br />
-									</div>
-								</div>
-								<div class="form-group mb-4">
 									<label class="col-md-12 p-0">Password</label>
 									<div class="col-md-12 border-bottom p-0">
 										<form:input path="password" type="password"
-											value="member.password" class="form-control p-0 border-0" />
+											placeholder="New Password" class="form-control p-0 border-0" />
 										<form:errors class="text-danger" path="password" />
 										<br />
 									</div>
@@ -77,15 +72,16 @@
 											<button class="btn btn-success">Update</button>
 										</div>
 										<div class="col-sm-3">
-											<button formaction="${contextPath }/confirmDelete/${member.id}"
+											<button
+												formaction="${contextPath }/confirmDelete/${member.id}"
 												formmethod="get" class="btn btn-danger">Delete</button>
 										</div>
 									</div>
 								</div>
-							</form:form>
+							</div>
 						</div>
 					</div>
-				</div>
+				</form:form>
 			</div>
 			<c:import url="layout/footer.jsp" />
 		</div>

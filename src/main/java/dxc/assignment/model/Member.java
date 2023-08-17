@@ -19,15 +19,17 @@ public class Member {
 
 	@Size(min = 8, max = 25, message = "Password must be between 8 to 25 characters")
 	private String password;
+	
+	private String passwordHash;
 
-	public Member(int id, String username, String email, String phoneNumber,
-			String password) {
+	public Member(int id, String username, String email, String phoneNumber, String passwordHash) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
-		this.password = password;
+		this.password = "";
+		this.passwordHash = passwordHash;
 	}
 
 	public static Member getDefault() {
@@ -72,5 +74,13 @@ public class Member {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getPasswordHash() {
+		return passwordHash;
+	}
+
+	public void setPasswordHash(String passwordHash) {
+		this.passwordHash = passwordHash;
 	}
 }

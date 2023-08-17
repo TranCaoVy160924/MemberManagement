@@ -3,6 +3,7 @@ package dxc.assignment.controller.member;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -11,15 +12,18 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import dxc.assignment.helper.EncoderHelper;
 import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
 
 @Controller
 public class AddMemberController {
 	private final MemberMapper memberMapper;
+	private final EncoderHelper encoderHelper;
 
-	public AddMemberController(MemberMapper memberMapper) {
+	public AddMemberController(MemberMapper memberMapper, EncoderHelper encoderHelper) {
 		this.memberMapper = memberMapper;
+		this.encoderHelper = encoderHelper;
 	}
 
 	@GetMapping("/register")
@@ -53,18 +57,29 @@ public class AddMemberController {
 		model.addAttribute("cancelAction", "/cancelRegister");
 		return "confirm";
 	}
-	
+
 	@GetMapping("/cancelRegister")
 	public String cancelRegister(HttpServletRequest request) {
 		request.getSession().removeAttribute("newMember");
-		
+
 		return "redirect:/register";
 	}
 
 	@PostMapping("/confirmRegister")
-	public String confirmRegister(@ModelAttribute("member") Member member) {
-		memberMapper.insert(member);
+	public String confirmRegister(@ModelAttribute("member") Member member,
+			ModelMap modelMap) {
+		try {
+			encoderHelper.encodeMemberPassword(member);
+			memberMapper.insert(member);
 
-		return "redirect:/";
+			return "redirect:/";
+		} catch (Exception e) {
+			if (e.getMessage()
+					.contains("duplicate key value violates unique constraint")) {
+				modelMap.addAttribute("registerError",
+						"Email " + member.getEmail() + "already exist!");
+			}
+			return "register";
+		}
 	}
 }

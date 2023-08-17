@@ -17,3 +17,15 @@
 <script src="${resourcePath}/js/sidebarmenu.js"></script>
 <!--Custom JavaScript -->
 <script src="${resourcePath}/js/custom.js"></script>
+
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+	toastr.options = {
+		"opacity" : 0, // Set the desired opacity level here
+		"positionClass" : "toast-top-right" // Customize the position if needed
+	};
+</script>
