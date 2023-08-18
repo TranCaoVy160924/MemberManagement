@@ -1,5 +1,7 @@
 package dxc.assignment.config;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
@@ -9,8 +11,20 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	public ModelAndView handleGlobalException(Exception ex) {
+		String error = "ERROR";
+		String instruction = "YOU SEEM TO BE TRYING TO FIND HIS WAY HOME";
+		
 		ModelAndView modelAndView = new ModelAndView("error");
-		System.out.println(ex.getMessage());
+		System.out.println("Error: " + ex.getMessage());
+		
+		if (ex.getMessage().equals("Access is denied")) {
+			error = "ACCESS DENIED";
+			instruction = "UNAUTHORIZE: YOU DONT HAVE THE PERMISSION TO ACCESS THIS FUNCTION";
+		}
+		
+		modelAndView.addObject("error", error);
+		modelAndView.addObject("instruction", instruction);
+		
 		return modelAndView;
 	}
 }

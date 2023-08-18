@@ -1,15 +1,18 @@
 package dxc.assignment.controller.member;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import dxc.assignment.constant.MemberRole;
 import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
 
 @Controller
+//@Secured({MemberRole.ADMIN, MemberRole.EDIT})
 public class DeleteMemberController {
 	private final MemberMapper memberMapper;
 
@@ -23,8 +26,8 @@ public class DeleteMemberController {
 
 		model.addAttribute("member", member);
 		model.addAttribute("title", "Delete Member");
-		model.addAttribute("confirmAction", "/confirmDelete/" + member.getId());
-		model.addAttribute("cancelAction", "/update/" + member.getId());
+		model.addAttribute("confirmAction", "confirmDelete/" + member.getId());
+		model.addAttribute("cancelAction", "update/" + member.getId());
 		return "confirm";
 	}
 

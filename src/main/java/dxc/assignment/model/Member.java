@@ -36,7 +36,7 @@ public class Member {
 	}
 
 	public static Member getDefault() {
-		return new Member(0, "", "", "", "", "USER");
+		return new Member(0, "", "", "", "", "VIEW");
 	}
 
 	public int getId() {

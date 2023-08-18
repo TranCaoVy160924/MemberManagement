@@ -1,7 +1,5 @@
 package dxc.assignment.security;
 
-import java.util.ArrayList;
-
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,8 +22,6 @@ public class MemberDetailService implements UserDetailsService {
 		if (member == null) {
 			throw new UsernameNotFoundException("User not found");
 		}
-		
-		System.out.println("Email: " + member.getPasswordHash());
 		
 		return User.builder()
 				.username(member.getEmail())

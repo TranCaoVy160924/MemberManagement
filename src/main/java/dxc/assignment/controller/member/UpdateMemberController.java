@@ -1,36 +1,33 @@
 package dxc.assignment.controller.member;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-//import dxc.assignment.helper.EncoderHelper;
+import dxc.assignment.constant.MemberRole;
+import dxc.assignment.helper.EncoderHelper;
 import dxc.assignment.helper.ValidationHelper;
 import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
 
 @Controller
+//@Secured({MemberRole.ADMIN, MemberRole.EDIT})
 public class UpdateMemberController {
 	private final MemberMapper memberMapper;
-//	private final EncoderHelper encoderHelper;
+	private final EncoderHelper encoderHelper;
 
-	public UpdateMemberController(MemberMapper memberMapper
-//			, EncoderHelper encoderHelper
-			) {
+	public UpdateMemberController(MemberMapper memberMapper,
+			EncoderHelper encoderHelper) {
 		this.memberMapper = memberMapper;
-//		this.encoderHelper = encoderHelper;
+		this.encoderHelper = encoderHelper;
 	}
 
 	@GetMapping("/update/{id}")
@@ -63,11 +60,13 @@ public class UpdateMemberController {
 		if (member == null) {
 			return "redirect:/";
 		}
+		
+		System.out.println("Reach here: GET - confirmUpdate");
 
 		model.addAttribute("member", member);
 		model.addAttribute("title", "Update member");
-		model.addAttribute("confirmAction", "/confirmUpdate");
-		model.addAttribute("cancelAction", "/cancelUpdate/" + member.getId());
+		model.addAttribute("confirmAction", "confirmUpdate");
+		model.addAttribute("cancelAction", "cancelUpdate/" + member.getId());
 		return "confirm";
 	}
 
@@ -78,8 +77,9 @@ public class UpdateMemberController {
 	}
 
 	@PostMapping("/confirmUpdate")
-	public String confirmRegister(@ModelAttribute("member") Member member) {
-//		encoderHelper.encodeMemberPassword(member);
+	public String confirmUpdate(@ModelAttribute("member") Member member) {
+		System.out.println("Reach here: POST - cofirmUpdate");
+		encoderHelper.encodeMemberPassword(member);
 		memberMapper.update(member);
 
 		return "redirect:/";

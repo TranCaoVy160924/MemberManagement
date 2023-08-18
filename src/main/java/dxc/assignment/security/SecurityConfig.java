@@ -56,12 +56,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.permitAll()
 				.anyRequest().authenticated();
 
-		http.formLogin().loginPage("/login").permitAll();
+		http.formLogin().loginPage("/login").permitAll().failureUrl("/login-error");
 
 		http.logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				.logoutSuccessUrl("/login").deleteCookies("JSESSIONID")
 				.invalidateHttpSession(true);
+		
+		http.csrf().disable();
+		
+		http.exceptionHandling().accessDeniedPage("/accessDenied");
 	}
 
 	@Bean

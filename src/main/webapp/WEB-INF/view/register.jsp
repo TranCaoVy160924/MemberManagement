@@ -34,6 +34,8 @@
 								action="${contextPath }/register" method="post">
 								<input name="id" type="hidden" value="0"
 									class="form-control p-0 border-0" />
+								<input name="role" type="hidden" value="${member.role }"
+									class="form-control p-0 border-0" />
 								<div class="form-group mb-4">
 									<label class="col-md-12 p-0">Username</label>
 									<div class="col-md-12 border-bottom p-0">

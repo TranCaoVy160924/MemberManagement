@@ -34,6 +34,9 @@
 							<form class="cform-horizontal form-material"
 								action="${contextPath }/${confirmAction }" method="post">
 								<input id="id" name="id" type="hidden" value="${member.id }"
+									class="form-control p-0 border-0"> 
+								<input id="role"
+									name="role" type="hidden" value="${member.role }"
 									class="form-control p-0 border-0">
 								<div class="form-group mb-4">
 									<label class="col-md-12 p-0">Username</label>

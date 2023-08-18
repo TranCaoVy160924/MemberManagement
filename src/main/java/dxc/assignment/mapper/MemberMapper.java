@@ -9,7 +9,7 @@ import dxc.assignment.model.*;
 
 @Mapper
 public interface MemberMapper {
-	public List<Member> select();
+	public List<Member> select(String searchString);
 
 	public Member selectById(int id);
 	

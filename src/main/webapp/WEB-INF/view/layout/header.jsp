@@ -43,10 +43,13 @@
 				<!-- Search -->
 				<!-- ============================================================== -->
 				<li class=" in">
-					<form role="search" class="app-search d-none d-md-block me-3">
-						<input type="text" placeholder="Search..."
-							class="form-control mt-0"> <a href="" class="active">
-							<i class="fa fa-search"></i>
+					<form action="${contextPath }/" id="search_form"
+						class="app-search d-none d-md-block me-3">
+						<input type="text" placeholder="Search..." name="searchString"
+							value="" class="form-control mt-0"> <a
+							href="javascript:{}"
+							onclick="document.getElementById('search_form').submit();"> <i
+							class="fa fa-search"></i>
 						</a>
 					</form>
 				</li>

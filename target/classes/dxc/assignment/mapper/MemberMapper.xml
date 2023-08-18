@@ -14,6 +14,11 @@
 
 	<select id="select" resultMap="memberMap">
 		SELECT member_id, username, email, password, phone_number, role FROM members
+		<if test="searchString != null">
+			WHERE LOWER(email) LIKE LOWER('%' || #{serachString} || '%')
+			OR LOWER(username) LIKE LOWER('%' || #{searchString} || '%')
+			OR LOWER(phone_number) LIKE LOWER('%' || #{searchString} || '%')
+		</if>
 		ORDER BY member_id ASC;
 	</select>
 
@@ -22,7 +27,7 @@
 		FROM members
 		WHERE members.member_id = #{id}
 	</select>
-	
+
 	<select id="selectByEmail" resultMap="memberMap">
 		SELECT member_id, username, email, password, phone_number, role
 		FROM members
@@ -30,9 +35,9 @@
 	</select>
 
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO members(username, email, password, phone_number)
+		INSERT INTO members(username, email, password, phone_number, role)
 		VALUES(#{username},
-		#{email}, #{passwordHash}, #{phoneNumber});
+		#{email}, #{passwordHash}, #{phoneNumber}, #{role});
 	</insert>
 
 	<update id="update">

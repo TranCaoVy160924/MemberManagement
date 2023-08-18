@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS members
 
 INSERT INTO members (username, email, password, phone_number, role) 
 VALUES 
-	('Phan Thanh Dung', 'thanhdung@gmail.com', '12345678', '0987654321', 'USER'),
+	('Phan Thanh Dung', 'thanhdung@gmail.com', '12345678', '0987654321', 'EDIT'),
 	('Tran Caov Vy', 'caovy@gmail.com', '12345678', '0123498765', 'ADMIN'),
-	('Dao Khac Nhien', 'dknhien@gmail.com', '12345678', '3256507861', 'USER');
+	('Dao Khac Nhien', 'dknhien@gmail.com', '12345678', '3256507861', 'VIEW');
 
 SELECT member_id, username, email, password, phone_number FROM members

@@ -24,6 +24,9 @@
 
 <link rel="stylesheet" href="${resourcePath }/css/login.css">
 
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
 </head>
 <body class="img js-fullheight"
 	style="background-image: url(${resourcePath }/images/bg.jpg);">
@@ -68,6 +71,15 @@
 	<script src="${resourcePath}/js/bootstrap.min.js"></script>
 	<script src="${resourcePath}/js/main.js"></script>
 
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+	<c:if test="${not empty loginError}">
+		<script>
+			$(document).ready(function() {
+				toastr.error('${loginError}', 'Login Fail');
+			});
+		</script>
+	</c:if>
 </body>
 </html>
 

@@ -3,6 +3,7 @@ package dxc.assignment.controller.member;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -12,20 +13,21 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import dxc.assignment.constant.MemberRole;
+import dxc.assignment.helper.EncoderHelper;
 //import dxc.assignment.helper.EncoderHelper;
 import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
 
 @Controller
+//@Secured({MemberRole.ADMIN, MemberRole.EDIT})
 public class AddMemberController {
 	private final MemberMapper memberMapper;
-//	private final EncoderHelper encoderHelper;
+	private final EncoderHelper encoderHelper;
 
-	public AddMemberController(MemberMapper memberMapper
-//			, EncoderHelper encoderHelper
-			) {
+	public AddMemberController(MemberMapper memberMapper, EncoderHelper encoderHelper) {
 		this.memberMapper = memberMapper;
-//		this.encoderHelper = encoderHelper;
+		this.encoderHelper = encoderHelper;
 	}
 
 	@GetMapping("/register")
@@ -55,8 +57,8 @@ public class AddMemberController {
 
 		model.addAttribute("member", member);
 		model.addAttribute("title", "Register new member");
-		model.addAttribute("confirmAction", "/confirmRegister");
-		model.addAttribute("cancelAction", "/cancelRegister");
+		model.addAttribute("confirmAction", "confirmRegister");
+		model.addAttribute("cancelAction", "cancelRegister");
 		return "confirm";
 	}
 
@@ -70,8 +72,9 @@ public class AddMemberController {
 	@PostMapping("/confirmRegister")
 	public String confirmRegister(@ModelAttribute("member") Member member,
 			ModelMap modelMap) {
+		System.out.println("User role: " + member.getRole());
 		try {
-//			encoderHelper.encodeMemberPassword(member);
+			encoderHelper.encodeMemberPassword(member);
 			memberMapper.insert(member);
 
 			return "redirect:/";
@@ -81,6 +84,7 @@ public class AddMemberController {
 				modelMap.addAttribute("registerError",
 						"Email " + member.getEmail() + "already exist!");
 			}
+			System.out.println(e.getMessage());
 			return "register";
 		}
 	}
