@@ -1,10 +1,12 @@
 package dxc.assignment.controller;
 
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -12,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -38,30 +41,34 @@ public class HomeController {
 
 	@GetMapping("/")
 	public String index(ModelMap model,
-			@RequestParam(name = "searchString", required = false, defaultValue = "") String searchString,
-			Authentication authentication, HttpServletRequest request) {
+			@RequestParam(name = "searchString", required = false, defaultValue = "") String searchString) {
 		List<Member> members = memberMapper.select(searchString);
 		model.addAttribute("members", members);
 
-		Collection<? extends GrantedAuthority> authorities = authentication
+		return "index";
+	}
+
+	@GetMapping("/login")
+	public String login() {
+		return "login";
+	}
+
+	@GetMapping("/login-sucess")
+	public String authenticate(Authentication authentication,
+			HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		Collection<? extends GrantedAuthority> authorities = userDetails
 				.getAuthorities();
 		List<String> roles = new ArrayList<>();
 		for (GrantedAuthority authority : authorities) {
 			roles.add(authority.getAuthority());
 		}
-		request.getSession().setAttribute("memberRole", roles);
 
-		return "index";
-	}
+		session.setAttribute("memberEmail", userDetails.getUsername());
+		session.setAttribute("memberRole", roles.get(0));
 
-//	@GetMapping("/logout")
-//	public String logout() {
-//		return "redirect:/login";
-//	}
-
-	@GetMapping("/login")
-	public String login() {
-		return "login";
+		return "redirect:/";
 	}
 
 	@GetMapping("/login-error")

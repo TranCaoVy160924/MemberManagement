@@ -1,5 +1,7 @@
 package dxc.assignment.controller.member;
 
+import java.nio.file.AccessDeniedException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.context.support.HttpRequestHandlerServlet;
 
 import dxc.assignment.constant.MemberRole;
 import dxc.assignment.helper.EncoderHelper;
@@ -19,7 +22,7 @@ import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
 
 @Controller
-//@Secured({MemberRole.ADMIN, MemberRole.EDIT})
+@Secured({MemberRole.ADMIN, MemberRole.EDIT})
 public class UpdateMemberController {
 	private final MemberMapper memberMapper;
 	private final EncoderHelper encoderHelper;
@@ -31,8 +34,14 @@ public class UpdateMemberController {
 	}
 
 	@GetMapping("/update/{id}")
-	public String update(@PathVariable int id, ModelMap model) {
+	public String update(@PathVariable int id, ModelMap model, HttpServletRequest request)
+			throws AccessDeniedException {
+		String memberRole = (String) request.getSession().getAttribute("memberRole");
 		Member member = memberMapper.selectById(id);
+		if (memberRole.equals("ROLE_EDIT") && member.getRole().equals("ROLE_ADMIN")) {
+			throw new AccessDeniedException("Access is denied");
+		}
+		
 		model.addAttribute("member", member);
 
 		return "update";
@@ -60,7 +69,7 @@ public class UpdateMemberController {
 		if (member == null) {
 			return "redirect:/";
 		}
-		
+
 		System.out.println("Reach here: GET - confirmUpdate");
 
 		model.addAttribute("member", member);

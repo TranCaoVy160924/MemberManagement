@@ -35,9 +35,6 @@
 								action="${contextPath }/${confirmAction }" method="post">
 								<input id="id" name="id" type="hidden" value="${member.id }"
 									class="form-control p-0 border-0"> 
-								<input id="role"
-									name="role" type="hidden" value="${member.role }"
-									class="form-control p-0 border-0">
 								<div class="form-group mb-4">
 									<label class="col-md-12 p-0">Username</label>
 									<div class="col-md-12 border-bottom p-0">
@@ -67,6 +64,14 @@
 									<div class="col-md-12 border-bottom p-0">
 										<input readonly name="phoneNumber" type="text"
 											placeholder="123 456 7890" value="${member.phoneNumber }"
+											class="form-control p-0 border-0">
+									</div>
+								</div>
+								<div class="form-group mb-4">
+									<label class="col-md-12 p-0">Role</label>
+									<div class="col-md-12 border-bottom p-0">
+										<input readonly name="role" type="text"
+											placeholder="123 456 7890" value="${member.role }"
 											class="form-control p-0 border-0">
 									</div>
 								</div>

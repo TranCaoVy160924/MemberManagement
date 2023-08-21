@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS members
 
 INSERT INTO members (username, email, password, phone_number, role) 
 VALUES 
-	('Phan Thanh Dung', 'thanhdung@gmail.com', '12345678', '0987654321', 'EDIT'),
-	('Tran Caov Vy', 'caovy@gmail.com', '12345678', '0123498765', 'ADMIN'),
-	('Dao Khac Nhien', 'dknhien@gmail.com', '12345678', '3256507861', 'VIEW');
+	('Phan Thanh Dung', 'thanhdung@gmail.com', crypt('12345678', gen_salt('bf', 10)), '0987654321', 'ROLE_EDIT'),
+	('Tran Caov Vy', 'caovy@gmail.com', crypt('12345678', gen_salt('bf', 10)), '0123498765', 'ROLE_ADMIN'),
+	('Dao Khac Nhien', 'dknhien@gmail.com', crypt('12345678', gen_salt('bf', 10)), '3256507861', 'ROLE_VIEW');
 
-SELECT member_id, username, email, password, phone_number FROM members
+SELECT member_id, username, email, password, phone_number, role FROM members

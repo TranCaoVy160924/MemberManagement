@@ -28,27 +28,15 @@ import dxc.assignment.mapper.MemberMapper;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private final MemberMapper memberMapper;
-	
+
 	public SecurityConfig(MemberMapper memberMapper) {
 		this.memberMapper = memberMapper;
 	}
-	
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
-//	@Bean
-//	public InMemoryUserDetailsManager userDetailsManager() {
-//		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//		UserDetails admin = User.builder().username("admin").password("password")
-//				.roles("ADMIN", "USER").build();
-//		
-//		UserDetails user = User.builder().username("user").password("password")
-//				.roles("ADMIN", "USER").build();
-//		
-//		return new InMemoryUserDetailsManager(admin, user);
-//	}
 
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
@@ -56,15 +44,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.permitAll()
 				.anyRequest().authenticated();
 
-		http.formLogin().loginPage("/login").permitAll().failureUrl("/login-error");
+		http.formLogin().loginPage("/login").permitAll()
+				.failureUrl("/login-error")
+				.defaultSuccessUrl("/login-sucess", true);
 
 		http.logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				.logoutSuccessUrl("/login").deleteCookies("JSESSIONID")
 				.invalidateHttpSession(true);
-		
+
 		http.csrf().disable();
-		
+
 		http.exceptionHandling().accessDeniedPage("/accessDenied");
 	}
 

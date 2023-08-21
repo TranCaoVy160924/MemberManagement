@@ -5,6 +5,8 @@
 
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <c:set var="resourcePath" value="${contextPath }/resources" />
+<c:set var="memberRole" value="${sessionScope.memberRole }" />
+<c:set var="memberEmail" value="${sessionScope.memberEmail }" />
 
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
@@ -33,30 +35,52 @@
 						<div class="white-box">
 							<h3 class="box-title">Basic Table</h3>
 							<div class="table-responsive">
-								<table class="table text-nowrap">
-									<thead>
-										<tr>
-											<th class="border-top-0"></th>
-											<th class="border-top-0">Username</th>
-											<th class="border-top-0">Email</th>
-											<th class="border-top-0">Phone Number</th>
-											<th class="border-top-0"></th>
-										</tr>
-									</thead>
-									<tbody>
-										<c:forEach var="member" items="${members}">
-											<tr>
-												<td>${member.id }</td>
-												<td>${member.username }</td>
-												<td>${member.email }</td>
-												<td>${member.phoneNumber }</td>
-												<td><a href="${contextPath }/update/${member.id }">
-														<button type="button" class="btn btn-primary">Update</button>
-												</a></td>
-											</tr>
-										</c:forEach>
-									</tbody>
-								</table>
+								<c:choose>
+									<c:when test="${members.size() > 0 }">
+										<table class="table text-nowrap">
+											<thead>
+												<tr>
+													<th class="border-top-0"></th>
+													<th class="border-top-0">Username</th>
+													<th class="border-top-0">Email</th>
+													<th class="border-top-0">Phone Number</th>
+													<th class="border-top-0">Role</th>
+													<c:if
+														test="${memberRole.equals('ROLE_ADMIN') or memberRole.equals('ROLE_EDIT')}">
+														<th class="border-top-0"></th>
+													</c:if>
+												</tr>
+											</thead>
+											<tbody>
+
+												<c:forEach var="member" items="${members}">
+													<tr>
+														<td>${member.id }</td>
+														<td>${member.username }</td>
+														<td>${member.email }</td>
+														<td>${member.phoneNumber }</td>
+														<td>${member.role }</td>
+														<c:if test="${!memberEmail.equals(member.email) }">
+															<c:if
+																test="${sessionScope.memberRole.contains('ROLE_ADMIN') }">
+																<td><a href="${contextPath }/update/${member.id }">
+																		<button type="button" class="btn btn-primary">Update</button>
+																</a></td>
+															</c:if>
+															<c:if
+																test="${sessionScope.memberRole.contains('ROLE_EDIT') and !member.role.equals('ROLE_ADMIN') }">
+																<td><a href="${contextPath }/update/${member.id }">
+																		<button type="button" class="btn btn-primary">Update</button>
+																</a></td>
+															</c:if>
+														</c:if>
+													</tr>
+												</c:forEach>
+											</tbody>
+										</table>
+									</c:when>
+									<c:otherwise>NO RECORD!</c:otherwise>
+								</c:choose>
 							</div>
 						</div>
 					</div>

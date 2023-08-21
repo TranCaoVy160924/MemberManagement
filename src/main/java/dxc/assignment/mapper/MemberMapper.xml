@@ -17,7 +17,8 @@
 		<if test="searchString != null">
 			WHERE LOWER(email) LIKE LOWER('%' || #{serachString} || '%')
 			OR LOWER(username) LIKE LOWER('%' || #{searchString} || '%')
-			OR LOWER(phone_number) LIKE LOWER('%' || #{searchString} || '%')
+			OR
+			LOWER(phone_number) LIKE LOWER('%' || #{searchString} || '%')
 		</if>
 		ORDER BY member_id ASC;
 	</select>
@@ -45,6 +46,7 @@
 		<set>
 			username = #{username},
 			phone_number = #{phoneNumber},
+			role = #{role},
 			<if test="password != null and password.trim() != ''">password = #{passwordHash}</if>
 		</set>
 		WHERE member_id = #{id}

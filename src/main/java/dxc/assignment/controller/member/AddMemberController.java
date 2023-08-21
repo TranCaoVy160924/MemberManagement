@@ -20,7 +20,7 @@ import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
 
 @Controller
-//@Secured({MemberRole.ADMIN, MemberRole.EDIT})
+@Secured({MemberRole.ADMIN, MemberRole.EDIT})
 public class AddMemberController {
 	private final MemberMapper memberMapper;
 	private final EncoderHelper encoderHelper;
@@ -72,7 +72,6 @@ public class AddMemberController {
 	@PostMapping("/confirmRegister")
 	public String confirmRegister(@ModelAttribute("member") Member member,
 			ModelMap modelMap) {
-		System.out.println("User role: " + member.getRole());
 		try {
 			encoderHelper.encodeMemberPassword(member);
 			memberMapper.insert(member);

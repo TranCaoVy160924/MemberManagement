@@ -67,6 +67,23 @@
 									</div>
 								</div>
 								<div class="form-group mb-4">
+									<label class="col-sm-12">Select Role</label>
+									<div class="col-sm-12 border-bottom">
+										<select name="role"
+											class="form-select shadow-none p-0 border-0 form-control-line">
+											<c:if test="${memberRole.equals('ROLE_ADMIN') }">
+												<option>ROLE_ADMIN</option>
+												<option>ROLE_EDIT</option>
+												<option>ROLE_VIEW</option>
+											</c:if>
+											<c:if test="${memberRole.equals('ROLE_EDIT') }">
+												<option>ROLE_EDIT</option>
+												<option>ROLE_VIEW</option>
+											</c:if>
+										</select>
+									</div>
+								</div>
+								<div class="form-group mb-4">
 									<div class="col-sm-12 row">
 										<div class="col-sm-9">
 											<button class="btn btn-success">Update</button>

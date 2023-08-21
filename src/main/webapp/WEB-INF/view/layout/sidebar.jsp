@@ -5,6 +5,7 @@
 
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <c:set var="resourcePath" value="${contextPath }/resources" />
+<c:set var="memberRole" value="${sessionScope.memberRole }" />
 
 <aside class="left-sidebar" data-sidebarbg="skin6">
 	<!-- Sidebar scroll-->
@@ -18,11 +19,14 @@
 						class="fa fa-table" aria-hidden="true"></i> <span
 						class="hide-menu">Home</span>
 				</a></li>
-				<li class="sidebar-item"><a
-					class="sidebar-link waves-effect waves-dark sidebar-link"
-					href="${contextPath }/register" aria-expanded="false"> <i
-						class="fa fa-user" aria-hidden="true"></i> <span class="hide-menu">Register</span>
-				</a></li>
+				<c:if test="${!memberRole.equals('ROLE_VIEW') }">
+					<li class="sidebar-item"><a
+						class="sidebar-link waves-effect waves-dark sidebar-link"
+						href="${contextPath }/register" aria-expanded="false"> <i
+							class="fa fa-user" aria-hidden="true"></i> <span
+							class="hide-menu">Register</span>
+					</a></li>
+				</c:if>
 				<li class="text-center p-20 upgrade-btn"><a
 					href="${contextPath }/logout"
 					class="btn d-grid btn-danger text-white" target="_blank">

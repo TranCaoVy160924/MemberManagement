@@ -6,6 +6,7 @@
 
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <c:set var="resourcePath" value="${contextPath }/resources" />
+<c:set var="memberRole" value="${sessionScope.memberRole }" />
 
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
@@ -33,8 +34,6 @@
 								class="form-horizontal form-material"
 								action="${contextPath }/register" method="post">
 								<input name="id" type="hidden" value="0"
-									class="form-control p-0 border-0" />
-								<input name="role" type="hidden" value="${member.role }"
 									class="form-control p-0 border-0" />
 								<div class="form-group mb-4">
 									<label class="col-md-12 p-0">Username</label>
@@ -71,6 +70,23 @@
 											placeholder="123 456 7890" class="form-control p-0 border-0" />
 										<form:errors class="text-danger" path="phoneNumber" />
 										<br />
+									</div>
+								</div>
+								<div class="form-group mb-4">
+									<label class="col-sm-12">Select Role</label>
+									<div class="col-sm-12 border-bottom">
+										<select name="role"
+											class="form-select shadow-none p-0 border-0 form-control-line">
+											<c:if test="${memberRole.equals('ROLE_ADMIN') }">
+												<option>ROLE_ADMIN</option>
+												<option>ROLE_EDIT</option>
+												<option>ROLE_VIEW</option>
+											</c:if>
+											<c:if test="${memberRole.equals('ROLE_EDIT') }">
+												<option>ROLE_EDIT</option>
+												<option>ROLE_VIEW</option>
+											</c:if>
+										</select>
 									</div>
 								</div>
 								<div class="form-group mb-4">
