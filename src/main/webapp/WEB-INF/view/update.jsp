@@ -72,14 +72,13 @@
 										<select name="role"
 											class="form-select shadow-none p-0 border-0 form-control-line">
 											<c:if test="${memberRole.equals('ROLE_ADMIN') }">
-												<option>ROLE_ADMIN</option>
-												<option>ROLE_EDIT</option>
-												<option>ROLE_VIEW</option>
+												<option
+													selected="${member.role.equals('ROLE_ADMIN')? 'selected': '' }">ROLE_ADMIN</option>
 											</c:if>
-											<c:if test="${memberRole.equals('ROLE_EDIT') }">
-												<option>ROLE_EDIT</option>
-												<option>ROLE_VIEW</option>
-											</c:if>
+											<option
+												selected="${member.role.equals('ROLE_EDIT')? 'selected': '' }">ROLE_EDIT</option>
+											<option
+												selected="${member.role.equals('ROLE_VIEW')? 'selected': '' }">ROLE_VIEW</option>
 										</select>
 									</div>
 								</div>
