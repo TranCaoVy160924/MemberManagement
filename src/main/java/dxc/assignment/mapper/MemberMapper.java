@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import dxc.assignment.model.*;
+import dxc.assignment.model.Member;
 
 @Mapper
 public interface MemberMapper {
