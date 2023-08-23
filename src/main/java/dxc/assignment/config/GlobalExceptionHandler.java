@@ -17,6 +17,7 @@ public class GlobalExceptionHandler {
 		ModelAndView modelAndView = new ModelAndView("error");
 		System.out.println("Error: " + ex.getMessage());
 		
+		// Specify the error message and instruction for unauthorize access
 		if (ex.getMessage().equals("Access is denied")) {
 			error = "ACCESS DENIED";
 			instruction = "UNAUTHORIZE: YOU DONT HAVE THE PERMISSION TO ACCESS THIS FUNCTION";

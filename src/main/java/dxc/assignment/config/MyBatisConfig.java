@@ -11,19 +11,17 @@ import dxc.assignment.mapper.MemberMapper;
 
 @Configuration
 public class MyBatisConfig {
+	
+	// DI for sqlSessionFactory, required to DI mapper
 	@Bean
 	public SqlSessionFactory sqlSessionFactory() throws Exception {
 		SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
 		factoryBean.setDataSource(getDataSource());
 
-//		SqlSessionFactory factory = factoryBean.getObject();
-//		factory.getConfiguration().addMapper(MemberMapper.class);
-		
-//		factoryBean.setMapperLocations(new ClassPathResource("dxc/assignment/mapper/MemberMapper.xml"));
-
 		return factoryBean.getObject();
 	}
 
+	// DI for specific mapper
 	@Bean
 	public MapperFactoryBean<MemberMapper> memberMapper() throws Exception {
 		MapperFactoryBean<MemberMapper> factoryBean = new MapperFactoryBean<>(
@@ -32,6 +30,7 @@ public class MyBatisConfig {
 		return factoryBean;
 	}
 
+	// Set the information of the datasource
 	private DriverManagerDataSource getDataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("org.postgresql.Driver");

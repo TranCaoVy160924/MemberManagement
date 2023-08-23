@@ -33,9 +33,11 @@ public class UpdateMemberController {
 		this.encoderHelper = encoderHelper;
 	}
 
+	// Go to the update page of member with id
 	@GetMapping("/update/{id}")
 	public String update(@PathVariable int id, ModelMap model, HttpServletRequest request)
 			throws AccessDeniedException {
+		// Get the current user and updating user, check if updating an higher level member
 		String memberRole = (String) request.getSession().getAttribute("memberRole");
 		Member member = memberMapper.selectById(id);
 		if (memberRole.equals("ROLE_EDIT") && member.getRole().equals("ROLE_ADMIN")) {
@@ -47,11 +49,13 @@ public class UpdateMemberController {
 		return "update";
 	}
 
+	// Validate member field and redirect to confirmation
 	@PostMapping("/update")
 	public String update(@Valid @ModelAttribute("member") Member member,
 			BindingResult bindingResult, HttpServletRequest request) {
 		// Ignore password validation when password is blank
 		if (member.getPassword().isBlank()) {
+			// Check if there are errors in other field beside password
 			if (!ValidationHelper.hasErrorOnlyForField(bindingResult, "password")) {
 				return "update";
 			}
@@ -59,19 +63,21 @@ public class UpdateMemberController {
 			return "update";
 		}
 
+		// Set the user for the delete and update confirmation page
 		request.getSession().setAttribute("editingMember", member);
 		return "redirect:/confirmUpdate";
 	}
 
+	// Display the confirmation page for updating member with id
 	@GetMapping("/confirmUpdate")
 	public String confirmUpdate(HttpServletRequest request, ModelMap model) {
+		// Try get the member from session
 		Member member = (Member) request.getSession().getAttribute("editingMember");
 		if (member == null) {
 			return "redirect:/";
 		}
 
-		System.out.println("Reach here: GET - confirmUpdate");
-
+		// Set the information for update page
 		model.addAttribute("member", member);
 		model.addAttribute("title", "会員を編集します");
 		model.addAttribute("confirmAction", "confirmUpdate");
@@ -79,15 +85,17 @@ public class UpdateMemberController {
 		return "confirm";
 	}
 
+	// When user cancel the confirmation of updating process
 	@GetMapping("/cancelUpdate/{id}")
 	public String cancelUpdate(@PathVariable int id, HttpServletRequest request) {
 		request.getSession().removeAttribute("editingMember");
 		return "redirect:/update/" + id;
 	}
 
+	// Update the member
 	@PostMapping("/confirmUpdate")
 	public String confirmUpdate(@ModelAttribute("member") Member member) {
-		System.out.println("Reach here: POST - cofirmUpdate");
+		// Encode the new member password before update
 		encoderHelper.encodeMemberPassword(member);
 		memberMapper.update(member);
 

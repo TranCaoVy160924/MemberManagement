@@ -15,6 +15,7 @@ public class MemberDetailService implements UserDetailsService {
 		this.memberMapper = memberMapper;
 	}
 
+	// Get the valid user from db for authentication
 	@Override
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
@@ -23,6 +24,7 @@ public class MemberDetailService implements UserDetailsService {
 			throw new UsernameNotFoundException("User not found");
 		}
 		
+		// Return the user detail which is set until logout
 		return User.builder()
 				.username(member.getEmail())
 				.password(member.getPasswordHash()) // Encoded

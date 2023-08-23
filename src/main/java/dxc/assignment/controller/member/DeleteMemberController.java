@@ -24,15 +24,18 @@ public class DeleteMemberController {
 		this.memberMapper = memberMapper;
 	}
 
+	// Display the confirmation page for deleting
 	@GetMapping("/confirmDelete/{id}")
 	public String confirmDelete(@PathVariable int id, ModelMap model,
 			HttpServletRequest request) throws AccessDeniedException {
+		// Get the current user and deleting user, check if deleting an higher level member
 		String memberRole = (String) request.getSession().getAttribute("memberRole");
 		Member member = memberMapper.selectById(id);
 		if (memberRole.equals("ROLE_EDIT") && member.getRole().equals("ROLE_ADMIN")) {
 			throw new AccessDeniedException("Access is denied");
 		}
 
+		// Set the information for delete confimation page
 		model.addAttribute("member", member);
 		model.addAttribute("title", "会員を削除します");
 		model.addAttribute("confirmAction", "confirmDelete/" + member.getId());
@@ -40,6 +43,8 @@ public class DeleteMemberController {
 		return "confirm";
 	}
 
+	
+	// Delete the member
 	@PostMapping("/confirmDelete/{id}")
 	public String confirmRegister(@PathVariable int id) {
 		memberMapper.delete(id);

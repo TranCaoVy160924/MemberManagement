@@ -13,6 +13,7 @@ public class EncoderHelper {
 		this.passwordEncoder =passwordEncoder;
 	}
 	
+	// Set the passwordHash of member as the encoded password
 	public void encodeMemberPassword(Member member) {
 		String password = member.getPassword();
 		member.setPasswordHash(passwordEncoder.encode(password));

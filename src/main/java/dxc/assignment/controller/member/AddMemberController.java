@@ -30,12 +30,15 @@ public class AddMemberController {
 		this.encoderHelper = encoderHelper;
 	}
 
+	// Go to the register page
 	@GetMapping("/register")
 	public String register(ModelMap model) {
+		// Set default member for binding
 		model.addAttribute("member", Member.getDefault());
 		return "register";
 	}
 
+	// Validate member field and redirect to confirmation
 	@PostMapping("/register")
 	public String register(@Valid @ModelAttribute("member") Member member,
 			BindingResult bindingResult, HttpServletRequest request) {
@@ -47,14 +50,16 @@ public class AddMemberController {
 		return "redirect:/confirmRegister";
 	}
 
+	// Display the confirmation page for register
 	@GetMapping("/confirmRegister")
 	public String confirmRegister(HttpServletRequest request, ModelMap model) {
+		// Try get the member from session
 		Member member = (Member) request.getSession().getAttribute("newMember");
-
 		if (member == null) {
 			return "redirect:/register";
 		}
 
+		// Set the information for confirm page
 		model.addAttribute("member", member);
 		model.addAttribute("title", "会員を登録します");
 		model.addAttribute("confirmAction", "confirmRegister");
@@ -62,6 +67,7 @@ public class AddMemberController {
 		return "confirm";
 	}
 
+	// When user cancel the confirmation of register process
 	@GetMapping("/cancelRegister")
 	public String cancelRegister(HttpServletRequest request) {
 		request.getSession().removeAttribute("newMember");
@@ -69,10 +75,12 @@ public class AddMemberController {
 		return "redirect:/register";
 	}
 
+	// Insert the new member
 	@PostMapping("/confirmRegister")
 	public String confirmRegister(@ModelAttribute("member") Member member,
 			ModelMap modelMap) {
 		try {
+			// Encode the new member password before insert
 			encoderHelper.encodeMemberPassword(member);
 			memberMapper.insert(member);
 

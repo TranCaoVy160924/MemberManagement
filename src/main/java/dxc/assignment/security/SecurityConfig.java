@@ -1,25 +1,12 @@
 package dxc.assignment.security;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import dxc.assignment.mapper.MemberMapper;
@@ -33,6 +20,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		this.memberMapper = memberMapper;
 	}
 
+	// DI the brypt encoder bean, automatically encode the password from login request when compare
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -53,11 +41,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.logoutSuccessUrl("/login").deleteCookies("JSESSIONID")
 				.invalidateHttpSession(true);
 
+		// Not required csrf
 		http.csrf().disable();
 
 		http.exceptionHandling().accessDeniedPage("/accessDenied");
 	}
 
+	// DI the custom detail service
 	@Bean
 	public MemberDetailService springDataUserDetailsService() {
 		return new MemberDetailService(memberMapper);
