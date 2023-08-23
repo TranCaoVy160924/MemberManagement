@@ -29,14 +29,13 @@
 					<div class="col-md-6 mx-auto">
 						<div class="white-box">
 							<h3 class="box-title">${title }</h3>
-							<p class="text-muted">If you are satisfied with this content,
-								please click the 'Confirm' button</p>
+							<p class="text-muted">この内容でよろしければ、「登録」ボタンをクリックしてください。</p>
 							<form class="cform-horizontal form-material"
 								action="${contextPath }/${confirmAction }" method="post">
 								<input id="id" name="id" type="hidden" value="${member.id }"
-									class="form-control p-0 border-0"> 
+									class="form-control p-0 border-0">
 								<div class="form-group mb-4">
-									<label class="col-md-12 p-0">Username</label>
+									<label class="col-md-12 p-0">名前</label>
 									<div class="col-md-12 border-bottom p-0">
 										<input readonly name="username" type="text"
 											placeholder="Username" value="${member.username }"
@@ -44,7 +43,7 @@
 									</div>
 								</div>
 								<div class="form-group mb-4">
-									<label for="example-email" class="col-md-12 p-0">Email</label>
+									<label for="example-email" class="col-md-12 p-0">メール</label>
 									<div class="col-md-12 border-bottom p-0">
 										<input readonly name="email" type="email"
 											placeholder="johnathan@admin.com" value="${member.email }"
@@ -52,15 +51,15 @@
 									</div>
 								</div>
 								<div class="form-group mb-4">
-									<label class="col-md-12 p-0">Password</label>
+									<label class="col-md-12 p-0">パスワード</label>
 									<div class="col-md-12 border-bottom p-0">
 										<input readonly name="password" type="password"
-											placeholder="Old Password" value="${member.password }"
+											placeholder="古いパスワード" value="${member.password }"
 											class="form-control p-0 border-0">
 									</div>
 								</div>
 								<div class="form-group mb-4">
-									<label class="col-md-12 p-0">Phone Number</label>
+									<label class="col-md-12 p-0">電話番号</label>
 									<div class="col-md-12 border-bottom p-0">
 										<input readonly name="phoneNumber" type="text"
 											placeholder="123 456 7890" value="${member.phoneNumber }"
@@ -68,7 +67,7 @@
 									</div>
 								</div>
 								<div class="form-group mb-4">
-									<label class="col-md-12 p-0">Role</label>
+									<label class="col-md-12 p-0">役割</label>
 									<div class="col-md-12 border-bottom p-0">
 										<input readonly name="role" type="text"
 											placeholder="123 456 7890" value="${member.role }"
@@ -78,11 +77,11 @@
 								<div class="form-group mb-4">
 									<div class="col-sm-12 row">
 										<div class="col-sm-9">
-											<button class="btn btn-success">Confirm</button>
+											<button class="btn btn-success">確認</button>
 										</div>
 										<div class="col-sm-3">
 											<button formaction="${contextPath }/${cancelAction }"
-												formmethod="get" class="btn btn-danger">Cancel</button>
+												formmethod="get" class="btn btn-danger">戻る</button>
 										</div>
 									</div>
 								</div>

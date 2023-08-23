@@ -17,20 +17,19 @@
 					class="sidebar-link waves-effect waves-dark sidebar-link"
 					href="${contextPath }/" aria-expanded="false"> <i
 						class="fa fa-table" aria-hidden="true"></i> <span
-						class="hide-menu">Home</span>
+						class="hide-menu">ホーム</span>
 				</a></li>
 				<c:if test="${!memberRole.equals('ROLE_VIEW') }">
 					<li class="sidebar-item"><a
 						class="sidebar-link waves-effect waves-dark sidebar-link"
 						href="${contextPath }/register" aria-expanded="false"> <i
 							class="fa fa-user" aria-hidden="true"></i> <span
-							class="hide-menu">Register</span>
+							class="hide-menu">追加</span>
 					</a></li>
 				</c:if>
 				<li class="text-center p-20 upgrade-btn"><a
 					href="${contextPath }/logout"
-					class="btn d-grid btn-danger text-white" target="_blank">
-						Logout</a></li>
+					class="btn d-grid btn-danger text-white" target="_blank">ログアウト</a></li>
 			</ul>
 
 		</nav>

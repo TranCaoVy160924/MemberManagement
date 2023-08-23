@@ -33,7 +33,7 @@
 				<div class="row">
 					<div class="col-sm-12">
 						<div class="white-box">
-							<h3 class="box-title">Basic Table</h3>
+							<h3 class="box-title">会員管理</h3>
 							<div class="table-responsive">
 								<c:choose>
 									<c:when test="${members.size() > 0 }">
@@ -41,10 +41,10 @@
 											<thead>
 												<tr>
 													<th class="border-top-0"></th>
-													<th class="border-top-0">Username</th>
-													<th class="border-top-0">Email</th>
-													<th class="border-top-0">Phone Number</th>
-													<th class="border-top-0">Role</th>
+													<th class="border-top-0">名前</th>
+													<th class="border-top-0">メール</th>
+													<th class="border-top-0">電話番号</th>
+													<th class="border-top-0">役割</th>
 													<c:if
 														test="${memberRole.equals('ROLE_ADMIN') or memberRole.equals('ROLE_EDIT')}">
 														<th class="border-top-0"></th>
@@ -64,13 +64,13 @@
 															<c:if
 																test="${sessionScope.memberRole.contains('ROLE_ADMIN') }">
 																<td><a href="${contextPath }/update/${member.id }">
-																		<button type="button" class="btn btn-primary">Update</button>
+																		<button type="button" class="btn btn-primary">更新</button>
 																</a></td>
 															</c:if>
 															<c:if
 																test="${sessionScope.memberRole.contains('ROLE_EDIT') and !member.role.equals('ROLE_ADMIN') }">
 																<td><a href="${contextPath }/update/${member.id }">
-																		<button type="button" class="btn btn-primary">Update</button>
+																		<button type="button" class="btn btn-primary">更新</button>
 																</a></td>
 															</c:if>
 														</c:if>
@@ -79,7 +79,7 @@
 											</tbody>
 										</table>
 									</c:when>
-									<c:otherwise>NO RECORD!</c:otherwise>
+									<c:otherwise>データなし</c:otherwise>
 								</c:choose>
 							</div>
 						</div>

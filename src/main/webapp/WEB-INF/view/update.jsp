@@ -31,7 +31,7 @@
 					action="${contextPath }/update" method="post">
 					<div class="col-lg-8 col-xlg-9 col-md-12">
 						<h3 class="box-title">
-							Updating ${member.email } <input hidden name="email" type="email"
+							会員を編集します。 <input hidden name="email" type="email"
 								value="${member.email }" />
 						</h3>
 						<div class="card">
@@ -39,7 +39,7 @@
 								<input name="id" type="hidden" value="${member.id }"
 									class="form-control p-0 border-0" />
 								<div class="form-group mb-4">
-									<label class="col-md-12 p-0">Username</label>
+									<label class="col-md-12 p-0">名前</label>
 									<div class="col-md-12 border-bottom p-0">
 										<form:input path="username" type="text"
 											value="${member.username }" class="form-control p-0 border-0" />
@@ -48,16 +48,16 @@
 									</div>
 								</div>
 								<div class="form-group mb-4">
-									<label class="col-md-12 p-0">Password</label>
+									<label class="col-md-12 p-0">パスワード</label>
 									<div class="col-md-12 border-bottom p-0">
 										<form:input path="password" type="password"
-											placeholder="New Password" class="form-control p-0 border-0" />
+											placeholder="新しいパスワード" class="form-control p-0 border-0" />
 										<form:errors class="text-danger" path="password" />
 										<br />
 									</div>
 								</div>
 								<div class="form-group mb-4">
-									<label class="col-md-12 p-0">Phone Number</label>
+									<label class="col-md-12 p-0">電話番号</label>
 									<div class="col-md-12 border-bottom p-0">
 										<form:input path="phoneNumber" type="text"
 											value="${member.phoneNumber }"
@@ -67,7 +67,7 @@
 									</div>
 								</div>
 								<div class="form-group mb-4">
-									<label class="col-sm-12">Select Role</label>
+									<label class="col-sm-12">役割</label>
 									<div class="col-sm-12 border-bottom">
 										<select name="role"
 											class="form-select shadow-none p-0 border-0 form-control-line">
@@ -82,12 +82,12 @@
 								<div class="form-group mb-4">
 									<div class="col-sm-12 row">
 										<div class="col-sm-9">
-											<button class="btn btn-success">Update</button>
+											<button class="btn btn-success">更新</button>
 										</div>
 										<div class="col-sm-3">
 											<button
 												formaction="${contextPath }/confirmDelete/${member.id}"
-												formmethod="get" class="btn btn-danger">Delete</button>
+												formmethod="get" class="btn btn-danger">削除</button>
 										</div>
 									</div>
 								</div>

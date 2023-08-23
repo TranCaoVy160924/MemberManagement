@@ -8,25 +8,6 @@
 
 <header class="topbar" data-navbarbg="skin5">
 	<nav class="navbar top-navbar navbar-expand-md navbar-dark">
-		<div class="navbar-header" data-logobg="skin6">
-			<!-- ============================================================== -->
-			<!-- Logo -->
-			<!-- ============================================================== -->
-			<a class="navbar-brand" href="${contextPath }"> <!-- Logo icon -->
-				<b class="logo-icon"> <!-- Dark Logo icon --> <img
-					src="${resourcePath }/plugins/images/logo-icon.png" alt="homepage" />
-			</b> <!--End Logo icon --> <!-- Logo text --> <span class="logo-text">
-					<!-- dark Logo text --> <img
-					src="${resourcePath }/plugins/images/logo-text.png" alt="homepage" />
-			</span>
-			</a>
-			<!-- ============================================================== -->
-			<!-- End Logo -->
-			<!-- ============================================================== -->
-		</div>
-		<!-- ============================================================== -->
-		<!-- End Logo -->
-		<!-- ============================================================== -->
 		<div class="navbar-collapse collapse" id="navbarSupportedContent"
 			data-navbarbg="skin5">
 			<ul class="navbar-nav d-none d-md-block d-lg-none">
@@ -45,7 +26,7 @@
 				<li class=" in">
 					<form action="${contextPath }/" id="search_form"
 						class="app-search d-none d-md-block me-3">
-						<input type="text" placeholder="Search..." name="searchString"
+						<input type="text" placeholder="会員を検索します..." name="searchString"
 							value="" class="form-control mt-0"> <a
 							href="javascript:{}"
 							onclick="document.getElementById('search_form').submit();"> <i

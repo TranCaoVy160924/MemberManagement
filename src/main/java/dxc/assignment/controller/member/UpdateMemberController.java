@@ -22,7 +22,7 @@ import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
 
 @Controller
-@Secured({MemberRole.ADMIN, MemberRole.EDIT})
+@Secured({ MemberRole.ADMIN, MemberRole.EDIT })
 public class UpdateMemberController {
 	private final MemberMapper memberMapper;
 	private final EncoderHelper encoderHelper;
@@ -41,7 +41,7 @@ public class UpdateMemberController {
 		if (memberRole.equals("ROLE_EDIT") && member.getRole().equals("ROLE_ADMIN")) {
 			throw new AccessDeniedException("Access is denied");
 		}
-		
+
 		model.addAttribute("member", member);
 
 		return "update";
@@ -73,7 +73,7 @@ public class UpdateMemberController {
 		System.out.println("Reach here: GET - confirmUpdate");
 
 		model.addAttribute("member", member);
-		model.addAttribute("title", "Update member");
+		model.addAttribute("title", "会員を編集します");
 		model.addAttribute("confirmAction", "confirmUpdate");
 		model.addAttribute("cancelAction", "cancelUpdate/" + member.getId());
 		return "confirm";

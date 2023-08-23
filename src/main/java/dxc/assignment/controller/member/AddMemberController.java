@@ -56,7 +56,7 @@ public class AddMemberController {
 		}
 
 		model.addAttribute("member", member);
-		model.addAttribute("title", "Register new member");
+		model.addAttribute("title", "会員を登録します");
 		model.addAttribute("confirmAction", "confirmRegister");
 		model.addAttribute("cancelAction", "cancelRegister");
 		return "confirm";

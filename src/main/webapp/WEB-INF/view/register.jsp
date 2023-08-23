@@ -28,6 +28,7 @@
 		<div class="page-wrapper">
 			<div class="container-fluid">
 				<div class="col-lg-8 col-xlg-9 col-md-12">
+					<h3 class="box-title">会員を登録します。</h3>
 					<div class="card">
 						<div class="card-body">
 							<form:form modelAttribute="member"
@@ -36,16 +37,16 @@
 								<input name="id" type="hidden" value="0"
 									class="form-control p-0 border-0" />
 								<div class="form-group mb-4">
-									<label class="col-md-12 p-0">Username</label>
+									<label class="col-md-12 p-0">名前</label>
 									<div class="col-md-12 border-bottom p-0">
-										<form:input path="username" type="text" placeholder="Username"
-											class="form-control p-0 border-0" />
+										<form:input path="username" type="text"
+											placeholder="Tran Van A" class="form-control p-0 border-0" />
 										<form:errors class="text-danger" path="username" />
 										<br />
 									</div>
 								</div>
 								<div class="form-group mb-4">
-									<label for="example-email" class="col-md-12 p-0">Email</label>
+									<label for="example-email" class="col-md-12 p-0">メール</label>
 									<div class="col-md-12 border-bottom p-0">
 										<form:input path="email" type="email"
 											placeholder="johnathan@admin.com"
@@ -55,16 +56,16 @@
 									</div>
 								</div>
 								<div class="form-group mb-4">
-									<label class="col-md-12 p-0">Password</label>
+									<label class="col-md-12 p-0">パスワード</label>
 									<div class="col-md-12 border-bottom p-0">
 										<form:input path="password" type="password"
-											placeholder="Password" class="form-control p-0 border-0" />
+											placeholder="12345678" class="form-control p-0 border-0" />
 										<form:errors class="text-danger" path="password" />
 										<br />
 									</div>
 								</div>
 								<div class="form-group mb-4">
-									<label class="col-md-12 p-0">Phone Number</label>
+									<label class="col-md-12 p-0">電話番号</label>
 									<div class="col-md-12 border-bottom p-0">
 										<form:input path="phoneNumber" type="text"
 											placeholder="123 456 7890" class="form-control p-0 border-0" />
@@ -73,7 +74,7 @@
 									</div>
 								</div>
 								<div class="form-group mb-4">
-									<label class="col-sm-12">Select Role</label>
+									<label class="col-sm-12">役割</label>
 									<div class="col-sm-12 border-bottom">
 										<select name="role"
 											class="form-select shadow-none p-0 border-0 form-control-line">
@@ -91,7 +92,7 @@
 								</div>
 								<div class="form-group mb-4">
 									<div class="col-sm-12">
-										<button class="btn btn-success">Register Member</button>
+										<button class="btn btn-success">確認</button>
 									</div>
 								</div>
 							</form:form>

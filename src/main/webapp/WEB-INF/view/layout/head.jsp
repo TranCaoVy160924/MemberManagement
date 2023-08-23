@@ -15,7 +15,7 @@
 <meta name="description"
 	content="Ample Admin Lite is powerful and clean admin dashboard template, inpired from Bootstrap Framework">
 <meta name="robots" content="noindex,nofollow">
-<title>Member Management</title>
+<title>会員管理</title>
 <link rel="canonical"
 	href="https://www.wrappixel.com/templates/ample-admin-lite/" />
 <!-- Favicon icon -->

@@ -10,7 +10,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<title>MemberManagement</title>
+<title>会員管理</title>
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -34,7 +34,7 @@
 		<div class="container">
 			<div class="row justify-content-center">
 				<div class="col-md-6 text-center mb-5">
-					<h2 class="heading-section">Member Management</h2>
+					<h2 class="heading-section">会員管理</h2>
 				</div>
 			</div>
 			<div class="row justify-content-center">
@@ -44,20 +44,18 @@
 							class="signin-form">
 							<div class="form-group">
 								<input type="text" name="username" class="form-control"
-									placeholder="Emaill" required>
+									placeholder="メール" required>
 							</div>
 							<div class="form-group">
 								<input id="password-field" type="password" name="password"
-									class="form-control" placeholder="Password" required> <span
-									toggle="#password-field"
-									class="fa fa-fw fa-eye field-icon toggle-password"></span>
+									class="form-control" placeholder="パスワード" required> <span
+									toggle="#password-field"></span>
 							</div>
 							<input type="hidden" name="${_csrf.parameterName}"
 								value="${_csrf.token}" />
 							<div class="form-group">
 								<button type="submit"
-									class="form-control btn btn-primary submit px-3">Sign
-									In</button>
+									class="form-control btn btn-primary submit px-3">ログイン</button>
 							</div>
 						</form>
 					</div>

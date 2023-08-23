@@ -34,7 +34,7 @@ public class DeleteMemberController {
 		}
 
 		model.addAttribute("member", member);
-		model.addAttribute("title", "Delete Member");
+		model.addAttribute("title", "会員を削除します");
 		model.addAttribute("confirmAction", "confirmDelete/" + member.getId());
 		model.addAttribute("cancelAction", "update/" + member.getId());
 		return "confirm";
