@@ -23,11 +23,9 @@ import dxc.assignment.model.Member;
 @Controller
 public class HomeController {
 	private final MemberMapper memberMapper;
-	private final EncoderHelper encoderHelper;
 
-	public HomeController(MemberMapper memberMapper, EncoderHelper encoderHelper) {
+	public HomeController(MemberMapper memberMapper) {
 		this.memberMapper = memberMapper;
-		this.encoderHelper = encoderHelper;
 	}
 
 	@GetMapping("/")
@@ -47,6 +45,7 @@ public class HomeController {
 	@GetMapping("/login-sucess")
 	public String authenticate(Authentication authentication,
 			HttpServletRequest request) {
+		// Get current user detail
 		HttpSession session = request.getSession();
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 		Collection<? extends GrantedAuthority> authorities = userDetails
@@ -56,6 +55,7 @@ public class HomeController {
 			roles.add(authority.getAuthority());
 		}
 
+		// Set current user email and role to session
 		session.setAttribute("memberEmail", userDetails.getUsername());
 		session.setAttribute("memberRole", roles.get(0));
 
