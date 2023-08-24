@@ -1,10 +1,15 @@
 package controller.member;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import javax.security.auth.message.AuthException;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
 import org.junit.Before;
@@ -12,58 +17,49 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.util.NestedServletException;
 
-import config.MyBatisTestConfig;
-import config.TestConfig;
+import dxc.assignment.controller.member.UpdateMemberController;
 import dxc.assignment.helper.EncoderHelper;
-import dxc.assignment.mapper.MemberMapper;
-import dxc.assignment.model.Member;
 import dxc.assignment.service.MemberService;
 import helper.MemberSecurityHelper;
 
-//@ActiveProfiles("test")
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {
-		TestConfig.class,
-//		MyBatisTestConfig.class
-})
 @WebAppConfiguration
 public class UpdateMemberControllerTest {
 	private MockMvc mockMvc;
 
-	@Autowired
-	private WebApplicationContext webApplicationContext;
+	@InjectMocks
+	private UpdateMemberController controllerUnderTest;
 
-//	@Mock
-	private MemberService memberService = Mockito.mock(MemberService.class);
-	
+	@Mock
+	private MemberService memberService;
+
 	@Mock
 	private EncoderHelper encoderHelper;
 
 	@Before
 	public void initTest() {
-		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-				.apply(springSecurity())
-				.build();
+		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+		viewResolver.setPrefix("/WEB-INF/view/");
+		viewResolver.setSuffix(".jsp");
 		MockitoAnnotations.openMocks(this);
-		
-		when(memberService.selectById(0)).thenReturn(Member.getDefault());
+		mockMvc = MockMvcBuilders
+				.standaloneSetup(controllerUnderTest)
+				.setViewResolvers(viewResolver)
+				.build();
 	}
 
 	@Test
 	public void testGetUpdateMemberNotExistRedirectToIndex() throws Exception {
-//		when(memberService.selectById(0)).thenReturn(Member.getDefault());
-		
+		when(memberService.selectById(0)).thenReturn(null);
+
 		mockMvc.perform(get("/update/0")
 				.with(user(MemberSecurityHelper.getAdminUser())))
 				.andExpect(status().is3xxRedirection())
@@ -72,16 +68,20 @@ public class UpdateMemberControllerTest {
 				.andReturn();
 	}
 
-	@Test
+	@Test(expected = AuthException.class)
 	public void testGetUpdateMemberEditUpdateAdminThrowException() throws Exception {
 		when(memberService.selectById(1)).thenReturn(MemberSecurityHelper.getValidTestAdminMember());
 		
-		mockMvc.perform(get("/update/1")
-				.with(user(MemberSecurityHelper.getEditUser()))
-				.sessionAttr("memberRole", "ROLE_EDIT"))
-				.andExpect(status().isOk())
-//				.andExpect(result -> assertTrue(result.getResolvedException() instanceof AuthException))
-			    .andExpect(result -> assertEquals("Access is denied", result.getResolvedException().getMessage()));
+		try {
+			mockMvc.perform(get("/update/1")
+					.with(user(MemberSecurityHelper.getEditUser()))
+					.sessionAttr("memberRole", "ROLE_EDIT"));
+		}
+		catch (NestedServletException e) {
+			Exception causeEx = (Exception) e.getCause();
+			assertEquals("Access is denied", causeEx.getMessage());
+			throw causeEx;
+		}
 	}
 
 //	@Test

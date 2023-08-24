@@ -13,6 +13,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,10 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import config.TestConfig;
+import dxc.assignment.controller.member.AddMemberController;
 import dxc.assignment.helper.EncoderHelper;
 import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
@@ -33,15 +36,12 @@ import dxc.assignment.service.MemberService;
 import helper.MemberSecurityHelper;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {
-		TestConfig.class
-})
 @WebAppConfiguration
 public class AddMemberControllerTest {
 	private MockMvc mockMvc;
 
-	@Autowired
-	private WebApplicationContext webApplicationContext;
+	@InjectMocks
+	private AddMemberController controllerUnderTest;
 
 	@Mock
 	private MemberService memberService;
@@ -51,10 +51,14 @@ public class AddMemberControllerTest {
 
 	@Before
 	public void initTest() {
-		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-				.apply(springSecurity())
-				.build();
+		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+		viewResolver.setPrefix("/WEB-INF/view/");
+		viewResolver.setSuffix(".jsp");
 		MockitoAnnotations.openMocks(this);
+		mockMvc = MockMvcBuilders
+				.standaloneSetup(controllerUnderTest)
+				.setViewResolvers(viewResolver)
+				.build();
 	}
 
 	@Test
@@ -125,7 +129,7 @@ public class AddMemberControllerTest {
 		assertEquals("confirmRegister", model.getAttribute("confirmAction"));
 		assertEquals("cancelRegister", model.getAttribute("cancelAction"));
 	}
-	
+
 	@Test
 	public void testGetCancelRegisterReturnRegister() throws Exception {
 		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();

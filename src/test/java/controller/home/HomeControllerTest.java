@@ -1,5 +1,6 @@
 package controller.home;
 
+import static org.assertj.core.api.Assertions.filter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -18,10 +19,15 @@ import javax.servlet.http.HttpSession;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,33 +35,42 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import config.TestConfig;
+import dxc.assignment.controller.HomeController;
 import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
+import dxc.assignment.security.SecurityConfig;
 import dxc.assignment.service.MemberService;
 import helper.MemberSecurityHelper;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {
-		TestConfig.class
-})
+@RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
+@ContextConfiguration(classes = { SecurityConfig.class, TestConfig.class })
 public class HomeControllerTest {
 	private MockMvc mockMvc;
 
 	@Autowired
-	private WebApplicationContext webApplicationContext;
+	FilterChainProxy springSecurityFilterChain;
+
+	@InjectMocks
+	private HomeController controllerUnderTest;
 
 	@Mock
 	private MemberService memberService;
 
 	@Before
 	public void initTest() {
-		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-				.apply(springSecurity())
-				.build();
+		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+		viewResolver.setPrefix("/WEB-INF/view/");
+		viewResolver.setSuffix(".jsp");
 		MockitoAnnotations.openMocks(this);
+		mockMvc = MockMvcBuilders
+				.standaloneSetup(controllerUnderTest)
+				.setViewResolvers(viewResolver)
+				.apply(springSecurity(springSecurityFilterChain))
+				.build();
 	}
 
 	@Test
