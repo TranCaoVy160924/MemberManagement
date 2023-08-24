@@ -17,15 +17,16 @@ import dxc.assignment.helper.EncoderHelper;
 //import dxc.assignment.helper.EncoderHelper;
 import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
+import dxc.assignment.service.MemberService;
 
 @Controller
 @Secured({MemberRole.ADMIN, MemberRole.EDIT})
 public class AddMemberController {
-	private final MemberMapper memberMapper;
+	private final MemberService memberService;
 	private final EncoderHelper encoderHelper;
 
-	public AddMemberController(MemberMapper memberMapper, EncoderHelper encoderHelper) {
-		this.memberMapper = memberMapper;
+	public AddMemberController(MemberService memberService, EncoderHelper encoderHelper) {
+		this.memberService = memberService;
 		this.encoderHelper = encoderHelper;
 	}
 
@@ -81,7 +82,7 @@ public class AddMemberController {
 		try {
 			// Encode the new member password before insert
 			encoderHelper.encodeMemberPassword(member);
-			memberMapper.insert(member);
+			memberService.insert(member);
 
 			return "redirect:/";
 		} catch (Exception e) {

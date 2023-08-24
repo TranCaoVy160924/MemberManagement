@@ -10,7 +10,9 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
@@ -25,13 +27,15 @@ import config.MyBatisTestConfig;
 import config.TestConfig;
 import dxc.assignment.helper.EncoderHelper;
 import dxc.assignment.mapper.MemberMapper;
+import dxc.assignment.model.Member;
+import dxc.assignment.service.MemberService;
 import helper.MemberSecurityHelper;
 
-@ActiveProfiles("test")
+//@ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {
 		TestConfig.class,
-		MyBatisTestConfig.class
+//		MyBatisTestConfig.class
 })
 @WebAppConfiguration
 public class UpdateMemberControllerTest {
@@ -40,9 +44,9 @@ public class UpdateMemberControllerTest {
 	@Autowired
 	private WebApplicationContext webApplicationContext;
 
-	@Mock
-	private MemberMapper memberMapper;
-
+//	@Mock
+	private MemberService memberService = Mockito.mock(MemberService.class);
+	
 	@Mock
 	private EncoderHelper encoderHelper;
 
@@ -52,11 +56,13 @@ public class UpdateMemberControllerTest {
 				.apply(springSecurity())
 				.build();
 		MockitoAnnotations.openMocks(this);
+		
+		when(memberService.selectById(0)).thenReturn(Member.getDefault());
 	}
 
 	@Test
 	public void testGetUpdateMemberNotExistRedirectToIndex() throws Exception {
-		when(memberMapper.selectById(0)).thenReturn(null);
+//		when(memberService.selectById(0)).thenReturn(Member.getDefault());
 		
 		mockMvc.perform(get("/update/0")
 				.with(user(MemberSecurityHelper.getAdminUser())))
@@ -68,9 +74,9 @@ public class UpdateMemberControllerTest {
 
 	@Test
 	public void testGetUpdateMemberEditUpdateAdminThrowException() throws Exception {
-		when(memberMapper.selectById(1)).thenReturn(MemberSecurityHelper.getValidTestAdminMember());
+		when(memberService.selectById(1)).thenReturn(MemberSecurityHelper.getValidTestAdminMember());
 		
-		mockMvc.perform(get("/update/2")
+		mockMvc.perform(get("/update/1")
 				.with(user(MemberSecurityHelper.getEditUser()))
 				.sessionAttr("memberRole", "ROLE_EDIT"))
 				.andExpect(status().isOk())

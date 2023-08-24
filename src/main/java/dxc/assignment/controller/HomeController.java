@@ -17,19 +17,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 //import dxc.assignment.helper.EncoderHelper;
 import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
+import dxc.assignment.service.MemberService;
 
 @Controller
 public class HomeController {
-	private final MemberMapper memberMapper;
+	private final MemberService memberService;
 
-	public HomeController(MemberMapper memberMapper) {
-		this.memberMapper = memberMapper;
+	public HomeController(MemberService memberService) {
+		this.memberService = memberService;
 	}
 
 	@GetMapping("/")
 	public String index(ModelMap model,
 			@RequestParam(name = "searchString", required = false, defaultValue = "") String searchString) {
-		List<Member> members = memberMapper.select(searchString);
+		List<Member> members = memberService.select(searchString);
 		model.addAttribute("members", members);
 
 		return "index";

@@ -29,6 +29,7 @@ import config.TestConfig;
 import dxc.assignment.helper.EncoderHelper;
 import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
+import dxc.assignment.service.MemberService;
 import helper.MemberSecurityHelper;
 
 @RunWith(SpringRunner.class)
@@ -43,7 +44,7 @@ public class AddMemberControllerTest {
 	private WebApplicationContext webApplicationContext;
 
 	@Mock
-	private MemberMapper memberMapper;
+	private MemberService memberService;
 
 	@Mock
 	private EncoderHelper encoderHelper;

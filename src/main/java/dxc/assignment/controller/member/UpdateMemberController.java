@@ -23,16 +23,17 @@ import dxc.assignment.helper.EncoderHelper;
 import dxc.assignment.helper.ValidationHelper;
 import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
+import dxc.assignment.service.MemberService;
 
 @Controller
 @Secured({ MemberRole.ADMIN, MemberRole.EDIT })
 public class UpdateMemberController {
-	private final MemberMapper memberMapper;
+	private final MemberService memberService;
 	private final EncoderHelper encoderHelper;
 
-	public UpdateMemberController(MemberMapper memberMapper,
+	public UpdateMemberController(MemberService memberService,
 			EncoderHelper encoderHelper) {
-		this.memberMapper = memberMapper;
+		this.memberService = memberService;
 		this.encoderHelper = encoderHelper;
 	}
 
@@ -44,7 +45,7 @@ public class UpdateMemberController {
 		// Get the current user and updating user, check if updating an higher level
 		// member
 		String memberRole = (String) session.getAttribute("memberRole");
-		Member member = memberMapper.selectById(id);
+		Member member = memberService.selectById(id);
 		// If member not exist redirect to index and display toast
 		if (member == null) {
 			redirectAttributes.addFlashAttribute("getInfoError",
@@ -113,7 +114,7 @@ public class UpdateMemberController {
 	public String confirmUpdate(@ModelAttribute("member") Member member) {
 		// Encode the new member password before update
 		encoderHelper.encodeMemberPassword(member);
-		memberMapper.update(member);
+		memberService.update(member);
 
 		return "redirect:/";
 	}

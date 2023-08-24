@@ -33,6 +33,7 @@ import org.springframework.web.context.WebApplicationContext;
 import config.TestConfig;
 import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
+import dxc.assignment.service.MemberService;
 import helper.MemberSecurityHelper;
 
 @RunWith(SpringRunner.class)
@@ -47,7 +48,7 @@ public class HomeControllerTest {
 	private WebApplicationContext webApplicationContext;
 
 	@Mock
-	private MemberMapper memberMapper;
+	private MemberService memberService;
 
 	@Before
 	public void initTest() {
@@ -63,7 +64,7 @@ public class HomeControllerTest {
 		// Add some mock data to members list
 		members.add(MemberSecurityHelper.getDefaultTestMember());
 
-		when(memberMapper.select("")).thenReturn(members);
+		when(memberService.select("")).thenReturn(members);
 
 		mockMvc.perform(get("/")
 				.with(user(MemberSecurityHelper.getAdminUser()))

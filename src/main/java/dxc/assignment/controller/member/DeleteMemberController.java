@@ -14,14 +14,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import dxc.assignment.constant.MemberRole;
 import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
+import dxc.assignment.service.MemberService;
 
 @Controller
 @Secured({ MemberRole.ADMIN, MemberRole.EDIT })
 public class DeleteMemberController {
-	private final MemberMapper memberMapper;
+	private final MemberService memberService;
 
-	public DeleteMemberController(MemberMapper memberMapper) {
-		this.memberMapper = memberMapper;
+	public DeleteMemberController(MemberService memberService) {
+		this.memberService = memberService;
 	}
 
 	// Display the confirmation page for deleting
@@ -30,7 +31,7 @@ public class DeleteMemberController {
 			HttpServletRequest request) throws AccessDeniedException {
 		// Get the current user and deleting user, check if deleting an higher level member
 		String memberRole = (String) request.getSession().getAttribute("memberRole");
-		Member member = memberMapper.selectById(id);
+		Member member = memberService.selectById(id);
 		if (memberRole.equals("ROLE_EDIT") && member.getRole().equals("ROLE_ADMIN")) {
 			throw new AccessDeniedException("Access is denied");
 		}
@@ -47,7 +48,7 @@ public class DeleteMemberController {
 	// Delete the member
 	@PostMapping("/confirmDelete/{id}")
 	public String confirmRegister(@PathVariable int id) {
-		memberMapper.delete(id);
+		memberService.delete(id);
 
 		return "redirect:/";
 	}

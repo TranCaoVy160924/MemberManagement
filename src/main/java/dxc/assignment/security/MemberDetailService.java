@@ -7,19 +7,20 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
+import dxc.assignment.service.MemberService;
 
 public class MemberDetailService implements UserDetailsService {
-	private final MemberMapper memberMapper;
+	private final MemberService memberService;
 
-	public MemberDetailService(MemberMapper memberMapper) {
-		this.memberMapper = memberMapper;
+	public MemberDetailService(MemberService memberService) {
+		this.memberService = memberService;
 	}
 
 	// Get the valid user from db for authentication
 	@Override
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
-		Member member = memberMapper.selectByEmail(username);
+		Member member = memberService.selectByEmail(username);
 		if (member == null) {
 			throw new UsernameNotFoundException("User not found");
 		}

@@ -10,14 +10,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import dxc.assignment.mapper.MemberMapper;
+import dxc.assignment.service.MemberService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	private final MemberMapper memberMapper;
+	private final MemberService memberService;
 
-	public SecurityConfig(MemberMapper memberMapper) {
-		this.memberMapper = memberMapper;
+	public SecurityConfig(MemberService memberService) {
+		this.memberService = memberService;
 	}
 
 	// DI the brypt encoder bean, automatically encode the password from login request when compare
@@ -50,6 +51,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	// DI the custom detail service
 	@Bean
 	public MemberDetailService springDataUserDetailsService() {
-		return new MemberDetailService(memberMapper);
+		return new MemberDetailService(memberService);
 	}
 }
