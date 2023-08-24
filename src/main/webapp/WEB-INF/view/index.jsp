@@ -92,6 +92,13 @@
 		</div>
 	</div>
 	<c:import url="layout/script.jsp" />
+	<c:if test="${not empty getInfoError}">
+		<script>
+			$(document).ready(function() {
+				toastr.error('${getInfoError}', 'Error');
+			});
+		</script>
+	</c:if>
 </body>
 
 </html>

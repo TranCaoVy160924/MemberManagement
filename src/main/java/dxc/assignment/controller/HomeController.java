@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.security.core.Authentication;
@@ -15,7 +14,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import dxc.assignment.helper.EncoderHelper;
 //import dxc.assignment.helper.EncoderHelper;
 import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
@@ -44,9 +42,8 @@ public class HomeController {
 
 	@GetMapping("/login-sucess")
 	public String authenticate(Authentication authentication,
-			HttpServletRequest request) {
+			HttpSession session) {
 		// Get current user detail
-		HttpSession session = request.getSession();
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 		Collection<? extends GrantedAuthority> authorities = userDetails
 				.getAuthorities();
@@ -63,7 +60,7 @@ public class HomeController {
 	}
 
 	@GetMapping("/login-error")
-	public String logout(ModelMap model) {
+	public String loginError(ModelMap model) {
 		model.addAttribute("loginError", "Invalid email or password");
 		return "login";
 	}

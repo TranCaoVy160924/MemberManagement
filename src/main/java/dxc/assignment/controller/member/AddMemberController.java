@@ -1,6 +1,7 @@
 package dxc.assignment.controller.member;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.security.access.annotation.Secured;
@@ -39,20 +40,20 @@ public class AddMemberController {
 	// Validate member field and redirect to confirmation
 	@PostMapping("/register")
 	public String register(@Valid @ModelAttribute("member") Member member,
-			BindingResult bindingResult, HttpServletRequest request) {
+			BindingResult bindingResult, HttpSession session) {
 		if (bindingResult.hasErrors()) {
 			return "register";
 		}
 
-		request.getSession().setAttribute("newMember", member);
+		session.setAttribute("newMember", member);
 		return "redirect:/confirmRegister";
 	}
 
 	// Display the confirmation page for register
 	@GetMapping("/confirmRegister")
-	public String confirmRegister(HttpServletRequest request, ModelMap model) {
+	public String confirmRegister(HttpSession session, ModelMap model) {
 		// Try get the member from session
-		Member member = (Member) request.getSession().getAttribute("newMember");
+		Member member = (Member) session.getAttribute("newMember");
 		if (member == null) {
 			return "redirect:/register";
 		}
