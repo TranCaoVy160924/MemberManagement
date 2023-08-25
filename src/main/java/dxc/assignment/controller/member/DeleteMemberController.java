@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import dxc.assignment.constant.MemberRole;
-import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
 import dxc.assignment.service.MemberService;
 

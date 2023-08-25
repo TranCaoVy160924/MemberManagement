@@ -1,36 +1,35 @@
 package controller.member;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import javax.security.auth.message.AuthException;
 import javax.servlet.http.HttpSession;
-
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import config.TestConfig;
 import dxc.assignment.controller.member.AddMemberController;
 import dxc.assignment.helper.EncoderHelper;
-import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
 import dxc.assignment.service.MemberService;
 import helper.MemberSecurityHelper;
@@ -92,7 +91,8 @@ public class AddMemberControllerTest {
 
 		MvcResult result = mockMvc.perform(post("/register")
 				.with(user(MemberSecurityHelper.getAdminUser()))
-				.flashAttr("member", member))
+				.flashAttr("member", member)
+				.sessionAttr("memberRole", "ROLE_ADMIN"))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/confirmRegister"))
 				.andReturn();
@@ -100,6 +100,21 @@ public class AddMemberControllerTest {
 		HttpSession session = result.getRequest().getSession();
 		Member expected = (Member) session.getAttribute("newMember");
 		assertThat(member).usingRecursiveComparison().isEqualTo(expected);
+	}
+
+	@Test(expected = AuthException.class)
+	public void testPostRegisterUnauthorizeThrowException() throws Exception {
+		Member member = MemberSecurityHelper.getValidTestAdminMember();
+
+		try {
+			mockMvc.perform(post("/register")
+					.with(user(MemberSecurityHelper.getAdminUser()))
+					.flashAttr("member", member)
+					.sessionAttr("memberRole", "ROLE_EDIT"));
+		} catch (Exception e) {
+			Exception causeEx = (Exception) e.getCause();
+			throw causeEx;
+		}
 	}
 
 	@Test
@@ -112,7 +127,7 @@ public class AddMemberControllerTest {
 	}
 
 	@Test
-	public void testGetConfirmRegisterValidNewMember() throws Exception {
+	public void testGetConfirmRegisterValidNewMemberReturnConfirm() throws Exception {
 		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
 		MvcResult result = mockMvc.perform(get("/confirmRegister")
 				.with(user(MemberSecurityHelper.getAdminUser()))
@@ -131,7 +146,7 @@ public class AddMemberControllerTest {
 	}
 
 	@Test
-	public void testGetCancelRegisterReturnRegister() throws Exception {
+	public void testGetCancelRegisterRedirectRegister() throws Exception {
 		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
 		MvcResult result = mockMvc.perform(get("/cancelRegister")
 				.with(user(MemberSecurityHelper.getAdminUser()))
@@ -143,5 +158,47 @@ public class AddMemberControllerTest {
 		HttpSession session = result.getRequest().getSession();
 		Member expectedNewMember = (Member) session.getAttribute("newMember");
 		assertEquals(null, expectedNewMember);
+	}
+
+	@Test
+	public void testPostConfirmRegisterDuplicateEmailReturnRegister() throws Exception {
+		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
+		Mockito.doThrow(new DuplicateKeyException(""))
+				.when(memberService).insert(validTestMember);
+
+		MvcResult result = mockMvc.perform(post("/confirmRegister")
+				.with(user(MemberSecurityHelper.getAdminUser()))
+				.flashAttr("member", validTestMember))
+				.andExpect(status().isOk())
+				.andExpect(view().name("register"))
+				.andReturn();
+
+		ModelMap model = result.getModelAndView().getModelMap();
+		String expected = "メールアドレスemail@gmail.comはすでに存在しています";
+		assertEquals(expected, model.getAttribute("registerError"));
+	}
+
+	@Test
+	public void testPostConfirmRegisterUnexpectedExceptionReturnRegister()
+			throws Exception {
+		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
+		Mockito.doThrow(new RuntimeException())
+				.when(memberService).insert(validTestMember);
+
+		mockMvc.perform(post("/confirmRegister")
+				.with(user(MemberSecurityHelper.getAdminUser()))
+				.flashAttr("member", validTestMember))
+				.andExpect(status().isOk())
+				.andExpect(view().name("register"));
+	}
+
+	@Test
+	public void testPostConfirmRegisterValidMemberRedirectIndex() throws Exception {
+		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
+		mockMvc.perform(post("/confirmRegister")
+				.with(user(MemberSecurityHelper.getAdminUser()))
+				.flashAttr("member", validTestMember))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/"));
 	}
 }

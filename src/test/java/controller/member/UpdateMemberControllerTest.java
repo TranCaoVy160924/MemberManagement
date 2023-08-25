@@ -1,16 +1,17 @@
 package controller.member;
 
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import javax.security.auth.message.AuthException;
-
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import javax.servlet.http.HttpSession;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,12 +22,15 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.util.NestedServletException;
 
 import dxc.assignment.controller.member.UpdateMemberController;
 import dxc.assignment.helper.EncoderHelper;
+import dxc.assignment.model.Member;
 import dxc.assignment.service.MemberService;
 import helper.MemberSecurityHelper;
 
@@ -79,78 +83,138 @@ public class UpdateMemberControllerTest {
 		}
 		catch (NestedServletException e) {
 			Exception causeEx = (Exception) e.getCause();
-			assertEquals("Access is denied", causeEx.getMessage());
 			throw causeEx;
 		}
 	}
 
-//	@Test
-//	public void testPostRegisterInvalidRequestReturnRegister() throws Exception {
-//		mockMvc.perform(post("/register")
-//				.with(user(MemberSecurityHelper.getAdminUser()))
-//				.flashAttr("member", Member.getDefault()))
-//				.andExpect(status().isOk())
-//				.andExpect(view().name("register"))
-//				.andExpect(model().attributeHasErrors("member"))
-//				.andReturn();
-//	}
-//
-//	@Test
-//	public void testPostRegisterValidRequestRedirectConfirmRegister() throws Exception {
-//		Member member = MemberSecurityHelper.getValidTestMember();
-//
-//		MvcResult result = mockMvc.perform(post("/register")
-//				.with(user(MemberSecurityHelper.getAdminUser()))
-//				.flashAttr("member", member))
-//				.andExpect(status().is3xxRedirection())
-//				.andExpect(view().name("redirect:/confirmRegister"))
-//				.andReturn();
-//
-//		HttpSession session = result.getRequest().getSession();
-//		Member expected = (Member) session.getAttribute("newMember");
-//		assertThat(member).usingRecursiveComparison().isEqualTo(expected);
-//	}
-//
-//	@Test
-//	public void testGetConfirmRegisterNoNewMemberRedirectRegister() throws Exception {
-//		mockMvc.perform(get("/confirmRegister")
-//				.with(user(MemberSecurityHelper.getAdminUser())))
-//				.andExpect(status().is3xxRedirection())
-//				.andExpect(view().name("redirect:/register"))
-//				.andReturn();
-//	}
-//
-//	@Test
-//	public void testGetConfirmRegisterValidNewMember() throws Exception {
-//		Member validTestMember = MemberSecurityHelper.getValidTestMember();
-//		MvcResult result = mockMvc.perform(get("/confirmRegister")
-//				.with(user(MemberSecurityHelper.getAdminUser()))
-//				.sessionAttr("newMember", validTestMember))
-//				.andExpect(status().isOk())
-//				.andExpect(view().name("confirm"))
-//				.andReturn();
-//
-//		ModelMap model = result.getModelAndView().getModelMap();
-//		assertThat(model.getAttribute("member"))
-//				.usingRecursiveComparison()
-//				.isEqualTo(validTestMember);
-//		assertEquals("会員を登録します", model.getAttribute("title"));
-//		assertEquals("confirmRegister", model.getAttribute("confirmAction"));
-//		assertEquals("cancelRegister", model.getAttribute("cancelAction"));
-//	}
-//
-//	@Test
-//	public void testGetCancelRegisterReturnRegister() throws Exception {
-//		Member validTestMember = MemberSecurityHelper.getValidTestMember();
-//		MvcResult result = mockMvc.perform(get("/cancelRegister")
-//				.with(user(MemberSecurityHelper.getAdminUser()))
-//				.sessionAttr("newMember", validTestMember))
-//				.andExpect(status().is3xxRedirection())
-//				.andExpect(view().name("redirect:/register"))
-//				.andReturn();
-//
-//		HttpSession session = result.getRequest().getSession();
-//		Member expectedNewMember = (Member) session.getAttribute("newMember");
-//		assertEquals(null, expectedNewMember);
-//	}
+	@Test
+	public void testGetUpdateMemberValidRequestReturnUpdate() throws Exception {
+		when(memberService.selectById(1)).thenReturn(MemberSecurityHelper.getValidTestAdminMember());
+		
+		mockMvc.perform(get("/update/1")
+				.with(user(MemberSecurityHelper.getAdminUser()))
+				.sessionAttr("memberRole", "ROLE_ADMIN"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("update"));
+	}
+
+	@Test
+	public void testPostUpdateMemberHasPasswordInvalidRequestReturnUpdate()
+			throws Exception {
+		Member invalidMember = MemberSecurityHelper.getDefaultTestMember();
+		invalidMember.setPassword("12345678");
+
+		mockMvc.perform(post("/update")
+				.with(user(MemberSecurityHelper.getAdminUser()))
+				.sessionAttr("memberRole", "ROLE_ADMIN")
+				.flashAttr("member", invalidMember))
+				.andExpect(status().isOk())
+				.andExpect(view().name("update"));
+	}
+
+	@Test
+	public void testPostUpdateMemberHasPasswordValidRequestRedirectConfirmUpdate()
+			throws Exception {
+		Member member = MemberSecurityHelper.getValidTestAdminMember();
+
+		MvcResult result = mockMvc.perform(post("/update")
+				.with(user(MemberSecurityHelper.getAdminUser()))
+				.sessionAttr("memberRole", "ROLE_ADMIN")
+				.flashAttr("member", member))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/confirmUpdate"))
+				.andReturn();
+
+		HttpSession session = result.getRequest().getSession();
+		assertThat(session.getAttribute("editingMember"))
+				.usingRecursiveComparison()
+				.isEqualTo(member);
+	}
+
+	@Test
+	public void testPostUpdateMemberBlankPasswordInvalidRequestReturnUpdate()
+			throws Exception {
+		Member invalidMember = MemberSecurityHelper.getDefaultTestMember();
+
+		mockMvc.perform(post("/update")
+				.with(user(MemberSecurityHelper.getAdminUser()))
+				.sessionAttr("memberRole", "ROLE_ADMIN")
+				.flashAttr("member", invalidMember))
+				.andExpect(status().isOk())
+				.andExpect(view().name("update"));
+	}
+
+	@Test
+	public void testPostUpdateMemberBlankPasswordValidRequestRedirectConfirmUpdate()
+			throws Exception {
+		Member member = MemberSecurityHelper.getValidTestAdminMember();
+		member.setPassword("");
+
+		MvcResult result = mockMvc.perform(post("/update")
+				.with(user(MemberSecurityHelper.getAdminUser()))
+				.sessionAttr("memberRole", "ROLE_ADMIN")
+				.flashAttr("member", member))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/confirmUpdate"))
+				.andReturn();
+
+		HttpSession session = result.getRequest().getSession();
+		assertThat(session.getAttribute("editingMember"))
+				.usingRecursiveComparison()
+				.isEqualTo(member);
+	}
+
+	@Test
+	public void testGetConfirmUpdateNoEditingMemberRedirectIndex() throws Exception {
+		mockMvc.perform(get("/confirmUpdate")
+				.with(user(MemberSecurityHelper.getAdminUser())))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/"))
+				.andReturn();
+	}
+
+	@Test
+	public void testGetConfirmUpdateValidEditingMemberReturnConfirm() throws Exception {
+		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
+		MvcResult result = mockMvc.perform(get("/confirmUpdate")
+				.with(user(MemberSecurityHelper.getAdminUser()))
+				.sessionAttr("editingMember", validTestMember))
+				.andExpect(status().isOk())
+				.andExpect(view().name("confirm"))
+				.andReturn();
+
+		ModelMap model = result.getModelAndView().getModelMap();
+		assertThat(model.getAttribute("member"))
+				.usingRecursiveComparison()
+				.isEqualTo(validTestMember);
+		assertEquals("会員を編集します", model.getAttribute("title"));
+		assertEquals("confirmUpdate", model.getAttribute("confirmAction"));
+		assertEquals("cancelUpdate/" + validTestMember.getId(),
+				model.getAttribute("cancelAction"));
+	}
+
+	@Test
+	public void testGetCancelUpdateRedirectUpdate() throws Exception {
+		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
+		MvcResult result = mockMvc.perform(get("/cancelUpdate/" + validTestMember.getId())
+				.with(user(MemberSecurityHelper.getAdminUser()))
+				.sessionAttr("editingMember", validTestMember))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/update/" + validTestMember.getId()))
+				.andReturn();
+
+		HttpSession session = result.getRequest().getSession();
+		Member expectedNewMember = (Member) session.getAttribute("editingMember");
+		assertEquals(null, expectedNewMember);
+	}
+	
+	@Test
+	public void testPostConfirmUpdateValidMemberRedirectIndex() throws Exception {
+		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
+		mockMvc.perform(post("/confirmUpdate")
+				.with(user(MemberSecurityHelper.getAdminUser()))
+				.flashAttr("member", validTestMember))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/"));
+	}
 }

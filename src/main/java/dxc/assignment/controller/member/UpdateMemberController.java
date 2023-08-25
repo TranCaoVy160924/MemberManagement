@@ -1,14 +1,11 @@
 package dxc.assignment.controller.member;
 
-import java.nio.file.AccessDeniedException;
-
 import javax.security.auth.message.AuthException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -21,7 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import dxc.assignment.constant.MemberRole;
 import dxc.assignment.helper.EncoderHelper;
 import dxc.assignment.helper.ValidationHelper;
-import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
 import dxc.assignment.service.MemberService;
 
@@ -52,13 +48,9 @@ public class UpdateMemberController {
 					"idが" + id + "のユーザーは存在しません。");
 			return "redirect:/";
 		}
-		
-		System.out.println(memberRole);
-		System.out.println(member.getRole());
-		System.out.println(member.getEmail());
-		
+
 		if (memberRole.equals("ROLE_EDIT") && member.getRole().equals("ROLE_ADMIN")) {
-			throw new AuthException("Access is denied");
+			throw new AuthException();
 		}
 
 		model.addAttribute("member", member);

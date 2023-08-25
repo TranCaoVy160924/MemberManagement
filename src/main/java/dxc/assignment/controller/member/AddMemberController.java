@@ -1,9 +1,11 @@
 package dxc.assignment.controller.member;
 
+import javax.security.auth.message.AuthException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -14,13 +16,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import dxc.assignment.constant.MemberRole;
 import dxc.assignment.helper.EncoderHelper;
-//import dxc.assignment.helper.EncoderHelper;
-import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
 import dxc.assignment.service.MemberService;
 
 @Controller
-@Secured({MemberRole.ADMIN, MemberRole.EDIT})
+@Secured({ MemberRole.ADMIN, MemberRole.EDIT })
 public class AddMemberController {
 	private final MemberService memberService;
 	private final EncoderHelper encoderHelper;
@@ -41,9 +41,16 @@ public class AddMemberController {
 	// Validate member field and redirect to confirmation
 	@PostMapping("/register")
 	public String register(@Valid @ModelAttribute("member") Member member,
-			BindingResult bindingResult, HttpSession session) {
+			BindingResult bindingResult, HttpSession session) throws AuthException {
 		if (bindingResult.hasErrors()) {
 			return "register";
+		}
+
+		// Get the current user and new user, check if registering an higher level
+		// member
+		String memberRole = (String) session.getAttribute("memberRole");
+		if (memberRole.equals("ROLE_EDIT") && member.getRole().equals("ROLE_ADMIN")) {
+			throw new AuthException();
 		}
 
 		session.setAttribute("newMember", member);
@@ -82,15 +89,16 @@ public class AddMemberController {
 		try {
 			// Encode the new member password before insert
 			encoderHelper.encodeMemberPassword(member);
+			System.out.println(member.getEmail());
 			memberService.insert(member);
 
 			return "redirect:/";
+		} catch (DuplicateKeyException e) {
+			modelMap.addAttribute("registerError",
+					"メールアドレス" + member.getEmail() + "はすでに存在しています");
+			return "register";
 		} catch (Exception e) {
-			if (e.getMessage()
-					.contains("duplicate key value violates unique constraint")) {
-				modelMap.addAttribute("registerError",
-						"Email " + member.getEmail() + "already exist!");
-			}
+			System.out.println(e.getClass().getCanonicalName());
 			System.out.println(e.getMessage());
 			return "register";
 		}

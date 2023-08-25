@@ -1,5 +1,7 @@
 package dxc.assignment.config;
 
+import javax.security.auth.message.AuthException;
+
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
@@ -13,10 +15,9 @@ public class GlobalExceptionHandler {
 		String instruction = "YOU SEEM TO BE TRYING TO FIND HIS WAY HOME";
 		
 		ModelAndView modelAndView = new ModelAndView("error");
-		System.out.println("Error: " + ex.getMessage());
 		
 		// Specify the error message and instruction for unauthorize access
-		if (ex.getMessage().equals("Access is denied")) {
+		if (ex instanceof AuthException) {
 			error = "ACCESS DENIED";
 			instruction = "UNAUTHORIZE: YOU DONT HAVE THE PERMISSION TO ACCESS THIS FUNCTION";
 		}
