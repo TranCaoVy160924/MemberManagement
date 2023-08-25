@@ -40,13 +40,17 @@ public class HomeController {
 		model.addAttribute("members", members);
 
 		int totalPages = members.getTotalPages();
-		if (totalPages > 0) {
-			List<Integer> pageNumbers = new ArrayList<>();
-			for (int i = 1; i < totalPages; i++) {
-				pageNumbers.add(i);
-			}
-			model.addAttribute("pageNumbers", pageNumbers);
-		}
+//		System.out.println("page size" + members.getSize());
+//		System.out.println("numberOfElements" + members.get());
+		System.out.println(totalPages);
+//		if (totalPages > 0) {
+//			List<Integer> pageNumbers = new ArrayList<>();
+//			for (int i = 1; i < totalPages; i++) {
+//				pageNumbers.add(i);
+//			}
+//			model.addAttribute("pageNumbers", pageNumbers);
+//		}
+		model.addAttribute("pageNumbers", totalPages);
 		return "index";
 	}
 

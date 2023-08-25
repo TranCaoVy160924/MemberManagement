@@ -81,10 +81,10 @@
 										</table>
 										<div class="container">
 											<ul class="pagination justify-content-center pagination-sm">
-												<c:if test="${members.totalPages > 1}">
-													<c:forEach var="pageNumber" items="${pageNumbers }">
+												<c:if test="${members.totalPages > 0}">
+													<c:forEach var="pageNumber" begin="1" end="${members.totalPages}">
 														<c:set var="isActive"
-															value="${pageNumber == members.number}" />
+															value="${pageNumber == members.number+1}" />
 														<li class="page-item ${isActive ? 'active' : ''}"><a
 															href="<c:url value='/'>
 											                        <c:param name="page" value="${pageNumber}" />

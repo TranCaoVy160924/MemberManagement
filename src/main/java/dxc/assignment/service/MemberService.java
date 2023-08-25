@@ -3,6 +3,8 @@ package dxc.assignment.service;
 import java.util.Collections;
 import java.util.List;
 
+import javax.sound.midi.Soundbank;
+
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,7 +17,7 @@ import dxc.assignment.model.Member;
 
 @Service
 public class MemberService {
-	private int pageSize = 1;
+	private int pageSize = 2;
 	private final MemberMapper memberMapper;
 
 	public MemberService(MemberMapper memberMapper) {
@@ -27,7 +29,7 @@ public class MemberService {
 				new RowBounds(pageSize * (currentPage - 1), pageSize));
 
 		Page<Member> paginatedMember = new PageImpl<Member>(members,
-				PageRequest.of(currentPage, pageSize), 
+				PageRequest.of(currentPage-1, pageSize),
 				memberMapper.countMembers(searchString));
 
 		return paginatedMember;
