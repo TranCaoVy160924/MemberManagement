@@ -2,10 +2,15 @@ package dxc.assignment.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,10 +32,21 @@ public class HomeController {
 
 	@GetMapping("/")
 	public String index(ModelMap model,
-			@RequestParam(name = "searchString", required = false, defaultValue = "") String searchString) {
-		List<Member> members = memberService.select(searchString);
+			@RequestParam("searchString") Optional<String> searchString,
+			@RequestParam("page") Optional<Integer> page, HttpSession session) {
+		session.setAttribute("searchString", searchString.orElse(""));
+		Page<Member> members = memberService
+				.select(searchString.orElse(""), page.orElse(1));
 		model.addAttribute("members", members);
 
+		int totalPages = members.getTotalPages();
+		if (totalPages > 0) {
+			List<Integer> pageNumbers = new ArrayList<>();
+			for (int i = 1; i < totalPages; i++) {
+				pageNumbers.add(i);
+			}
+			model.addAttribute("pageNumbers", pageNumbers);
+		}
 		return "index";
 	}
 

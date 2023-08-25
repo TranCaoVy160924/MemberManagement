@@ -7,6 +7,7 @@
 <c:set var="resourcePath" value="${contextPath }/resources" />
 <c:set var="memberRole" value="${sessionScope.memberRole }" />
 <c:set var="memberEmail" value="${sessionScope.memberEmail }" />
+<c:set var="searchString" value="${sessionScope.searchString }" />
 
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
@@ -36,7 +37,7 @@
 							<h3 class="box-title">会員管理</h3>
 							<div class="table-responsive">
 								<c:choose>
-									<c:when test="${members.size() > 0 }">
+									<c:when test="${members.getNumberOfElements() > 0 }">
 										<table class="table text-nowrap">
 											<thead>
 												<tr>
@@ -53,7 +54,7 @@
 											</thead>
 											<tbody>
 
-												<c:forEach var="member" items="${members}">
+												<c:forEach var="member" items="${members.content}">
 													<tr>
 														<td>${member.id }</td>
 														<td>${member.username }</td>
@@ -78,6 +79,23 @@
 												</c:forEach>
 											</tbody>
 										</table>
+										<div class="container">
+											<ul class="pagination justify-content-center pagination-sm">
+												<c:if test="${members.totalPages > 1}">
+													<c:forEach var="pageNumber" items="${pageNumbers }">
+														<c:set var="isActive"
+															value="${pageNumber == members.number}" />
+														<li class="page-item ${isActive ? 'active' : ''}"><a
+															href="<c:url value='/'>
+											                        <c:param name="page" value="${pageNumber}" />
+											                        <c:param name="searchString" value="${searchString}" />
+											                    </c:url>"
+															class="page-link"> <c:out value="${pageNumber}" />
+														</a></li>
+													</c:forEach>
+												</c:if>
+											</ul>
+										</div>
 									</c:when>
 									<c:otherwise>データなし</c:otherwise>
 								</c:choose>

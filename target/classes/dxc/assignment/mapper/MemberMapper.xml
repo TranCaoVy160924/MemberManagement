@@ -17,10 +17,18 @@
 		<if test="searchString != null">
 			WHERE LOWER(email) LIKE LOWER('%' || #{serachString} || '%')
 			OR LOWER(username) LIKE LOWER('%' || #{searchString} || '%')
-			OR
-			LOWER(phone_number) LIKE LOWER('%' || #{searchString} || '%')
+			OR LOWER(phone_number) LIKE LOWER('%' || #{searchString} || '%')
 		</if>
 		ORDER BY member_id ASC;
+	</select>
+	
+	<select id="countMembers">
+		SELECT COUNT(*) FROM members
+		<if test="searchString != null">
+			WHERE LOWER(email) LIKE LOWER('%' || #{serachString} || '%')
+			OR LOWER(username) LIKE LOWER('%' || #{searchString} || '%')
+			OR LOWER(phone_number) LIKE LOWER('%' || #{searchString} || '%')
+		</if>
 	</select>
 
 	<select id="selectById" resultMap="memberMap">

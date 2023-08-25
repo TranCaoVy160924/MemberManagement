@@ -5,6 +5,7 @@
 
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <c:set var="resourcePath" value="${contextPath }/resources" />
+<c:set var="searchString" value="${sessionScope.searchString }" />
 
 <header class="topbar" data-navbarbg="skin5">
 	<nav class="navbar top-navbar navbar-expand-md navbar-dark">
@@ -27,7 +28,7 @@
 					<form action="${contextPath }/" id="search_form"
 						class="app-search d-none d-md-block me-3">
 						<input type="text" placeholder="会員を検索します..." name="searchString"
-							value="" class="form-control mt-0"> <a
+							value="${searchString }" class="form-control mt-0"> <a
 							href="javascript:{}"
 							onclick="document.getElementById('search_form').submit();"> <i
 							class="fa fa-search"></i>
