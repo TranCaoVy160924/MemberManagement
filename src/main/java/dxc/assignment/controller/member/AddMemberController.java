@@ -76,8 +76,8 @@ public class AddMemberController {
 
 	// When user cancel the confirmation of register process
 	@GetMapping("/cancelRegister")
-	public String cancelRegister(HttpServletRequest request) {
-		request.getSession().removeAttribute("newMember");
+	public String cancelRegister(HttpSession session) {
+		session.removeAttribute("newMember");
 
 		return "redirect:/register";
 	}

@@ -61,7 +61,7 @@ public class UpdateMemberController {
 	// Validate member field and redirect to confirmation
 	@PostMapping("/update")
 	public String update(@Valid @ModelAttribute("member") Member member,
-			BindingResult bindingResult, HttpServletRequest request) {
+			BindingResult bindingResult, HttpSession session) {
 		// Ignore password validation when password is blank
 		if (member.getPassword().isBlank()) {
 			// Check if there are errors in other field beside password
@@ -73,15 +73,15 @@ public class UpdateMemberController {
 		}
 
 		// Set the user for the delete and update confirmation page
-		request.getSession().setAttribute("editingMember", member);
+		session.setAttribute("editingMember", member);
 		return "redirect:/confirmUpdate";
 	}
 
 	// Display the confirmation page for updating member with id
 	@GetMapping("/confirmUpdate")
-	public String confirmUpdate(HttpServletRequest request, ModelMap model) {
+	public String confirmUpdate(HttpSession session, ModelMap model) {
 		// Try get the member from session
-		Member member = (Member) request.getSession().getAttribute("editingMember");
+		Member member = (Member) session.getAttribute("editingMember");
 		if (member == null) {
 			return "redirect:/";
 		}
@@ -96,8 +96,8 @@ public class UpdateMemberController {
 
 	// When user cancel the confirmation of updating process
 	@GetMapping("/cancelUpdate/{id}")
-	public String cancelUpdate(@PathVariable int id, HttpServletRequest request) {
-		request.getSession().removeAttribute("editingMember");
+	public String cancelUpdate(@PathVariable int id, HttpSession session) {
+		session.removeAttribute("editingMember");
 		return "redirect:/update/" + id;
 	}
 
