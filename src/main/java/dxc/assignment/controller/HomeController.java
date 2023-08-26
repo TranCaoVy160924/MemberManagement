@@ -39,18 +39,6 @@ public class HomeController {
 				.select(searchString.orElse(""), page.orElse(1));
 		model.addAttribute("members", members);
 
-		int totalPages = members.getTotalPages();
-//		System.out.println("page size" + members.getSize());
-//		System.out.println("numberOfElements" + members.get());
-		System.out.println(totalPages);
-//		if (totalPages > 0) {
-//			List<Integer> pageNumbers = new ArrayList<>();
-//			for (int i = 1; i < totalPages; i++) {
-//				pageNumbers.add(i);
-//			}
-//			model.addAttribute("pageNumbers", pageNumbers);
-//		}
-		model.addAttribute("pageNumbers", totalPages);
 		return "index";
 	}
 

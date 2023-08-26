@@ -17,7 +17,7 @@ import dxc.assignment.model.Member;
 
 @Service
 public class MemberService {
-	private int pageSize = 2;
+	private int pageSize = 10;
 	private final MemberMapper memberMapper;
 
 	public MemberService(MemberMapper memberMapper) {
