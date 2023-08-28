@@ -42,6 +42,7 @@ public class AddMemberController {
 	@PostMapping("/register")
 	public String register(@Valid @ModelAttribute("member") Member member,
 			BindingResult bindingResult, HttpSession session) throws AuthException {
+		System.out.println(member.getUsername().length());
 		if (bindingResult.hasErrors()) {
 			return "register";
 		}
